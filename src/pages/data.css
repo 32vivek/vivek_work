@@ -1,0 +1,10 @@
+.MuiPagination-ul {
+    .MuiPaginationItem-root {
+        font-size: 36px;
+        /* Adjust the font size as needed */
+        min-width: 40px;
+        /* Adjust the minimum width as needed */
+        height: 40px;
+        /* Adjust the height as needed */
+    }
+}

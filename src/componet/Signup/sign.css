@@ -1,0 +1,7 @@
+.white-input::placeholder {
+    color: white;
+}
+
+.white-label {
+    color: white !important;
+}

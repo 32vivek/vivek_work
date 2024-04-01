@@ -1,0 +1,15 @@
+
+
+.custom-header {
+    background-color: rgb(95, 95, 221);
+    /* Change this to the desired color */
+    color: white;
+    /* Change this to the desired text color */
+}
+
+
+
+.MuiDataGrid-iconSeparator {
+    color: white !important;
+    /* Change this to the desired color */
+}
