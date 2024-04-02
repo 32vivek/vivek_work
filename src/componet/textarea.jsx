@@ -83,6 +83,7 @@ export default function TextArea({ label, placeholder }) {
     <Input
       aria-label={label}
       multiline
+      size="small"
       placeholder={placeholder}
     />
   );

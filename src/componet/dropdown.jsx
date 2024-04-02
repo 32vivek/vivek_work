@@ -20,11 +20,12 @@ function Dropdown({ placeholder, options, name, handleInputChange, error }) {
                     value={selectedValue}
                     onChange={handleChange}
                     displayEmpty
-                    style={{
-                        height: '40px',
-                        fontSize: '0.8rem',
-                        padding: '6px 12px',
-                    }}
+                    size="small"
+                // style={{
+                //     height: '40px',
+                //     fontSize: '0.8rem',
+                //     padding: '6px 12px',
+                // }}
                 >
                     <MenuItem value="" disabled>
                         {placeholder}

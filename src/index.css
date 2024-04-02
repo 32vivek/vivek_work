@@ -16,7 +16,7 @@ code {
 *{
   background-image : url('../public/black-mulberry-paper-textured-background.jpg')
 } */
-body {
+/* body {
   font-family: var(--font-family);
   font-weight: normal;
   background: var(--surface-ground);
@@ -24,5 +24,5 @@ body {
   padding: 1rem;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
+} */
  

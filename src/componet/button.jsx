@@ -8,8 +8,17 @@ const Buttton = ({ onClick, name }) => {
 
         <div style={{ marginLeft: '150px', marginBottom: '30px' }}>
             <FormControl>
-                <Button variant="contained" onClick={onClick}>{name}</Button>
+                <Button
+                    variant="contained"
+                    onClick={onClick}
+                // sx={{
+                //     transform: 'perspective(500px) rotateY(45deg)'
+                // }}
+                >
+                    {name}
+                </Button>
             </FormControl>
+
         </div>
 
     );

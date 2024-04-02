@@ -255,6 +255,8 @@ const ContactForm = () => {
                         <TextField
                             placeholder="Search"
                             variant="filled"
+                            size="small"
+                            // width="120px"
                             onChange={(e) => handleSearch(e.target.value)}
                             fullWidth
                         />
@@ -296,6 +298,7 @@ const ContactForm = () => {
                                                     {...register('name', { required: true })}
                                                     variant="filled"
                                                     error={!!formErrors.name}
+                                                    size="small"
                                                     helperText={formErrors.name ? 'Name is required' : ''}
                                                     defaultValue={editingUser ? editingUser.name : ''}
                                                     color="primary" focused
@@ -306,6 +309,7 @@ const ContactForm = () => {
                                                 <TextField
                                                     fullWidth
                                                     label="Email"
+                                                    size="small"
                                                     {...register('email', { required: true, pattern: /^\S+@\S+\.\S+$/ })}
                                                     type="email"
                                                     variant="filled"
@@ -320,6 +324,7 @@ const ContactForm = () => {
                                                 <TextField
                                                     fullWidth
                                                     label="Mobile Number"
+                                                    size="small"
                                                     {...register('mobile', { required: true, pattern: /^\d{10}$/ })}
                                                     variant="filled"
                                                     error={!!formErrors.mobile}
@@ -334,6 +339,7 @@ const ContactForm = () => {
                                                     select
                                                     fullWidth
                                                     label="Department"
+                                                    size="small"
                                                     {...register('department', { required: true })}
                                                     variant="filled"
                                                     error={!!formErrors.department}

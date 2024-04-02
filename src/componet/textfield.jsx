@@ -13,6 +13,8 @@ const Texxt = ({ formValues, formErrors, handleInputChange, label, placeholder, 
                 InputProps={{ readOnly: isFullNameField }}
                 id={name}
                 label={label}
+                size="small"
+                focused
                 // variant="filled"
                 placeholder={placeholder}
                 // color="primary"

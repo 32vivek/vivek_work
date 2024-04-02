@@ -15,6 +15,7 @@ import Texxt from '../componet/textfield';
 import { experimentalStyled as styled } from '@mui/material/styles';
 import TextArea from '../componet/textarea';
 import RadioButton from '../componet/radiobutton';
+import Buttton from '../componet/button';
 
 const User = () => {
     const [data, setData] = useState([]);
@@ -31,7 +32,7 @@ const User = () => {
         mobile: '',
         checkboxData: [],
         qualification: '',
-        address: '', 
+        address: '',
     });
     const [formErrors, setFormErrors] = useState({
         name: '',
@@ -52,7 +53,7 @@ const User = () => {
     const handleFileChange = (event) => {
         const file = event.target.files && event.target.files[0];
         if (file) {
-           
+
             setFile(file);
         }
     };
@@ -63,7 +64,7 @@ const User = () => {
 
     const handleChangeGender = (value) => {
         setGender(value);
-        setFormErrors({ ...formErrors, gender: '' }); 
+        setFormErrors({ ...formErrors, gender: '' });
     };
 
     const Item = styled(Paper)(({ theme }) => ({
@@ -156,14 +157,14 @@ const User = () => {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         if (name === 'name' || name === 'lastname') {
-          
+
             setFormValues((prevFormValues) => ({
                 ...prevFormValues,
                 [name]: value,
-               
+
                 fullname: name === 'name' ? value.trim() + ' ' + (prevFormValues.lastname || '') : (prevFormValues.name || '') + ' ' + value.trim(),
             }));
-          
+
             const errors = {};
             if (!value.trim()) {
                 errors[name] = name === 'name' ? 'First Name is required' : 'Last Name is required';
@@ -174,13 +175,13 @@ const User = () => {
                 ...prevFormErrors,
                 ...errors,
             }));
-        } else if (name === 'address') { 
+        } else if (name === 'address') {
             setFormValues((prevFormValues) => ({
                 ...prevFormValues,
                 [name]: value,
             }));
         } else {
-          
+
             setFormValues((prevFormValues) => ({
                 ...prevFormValues,
                 [name]: value,
@@ -277,7 +278,7 @@ const User = () => {
                     jason: false,
                     antoine: false,
                 });
-              
+
                 toast.success('Form submitted successfully!', {
                     position: "top-right",
                     autoClose: 3000,
@@ -289,7 +290,7 @@ const User = () => {
                 });
             } catch (error) {
                 console.error('Error submitting form:', error);
-              
+
                 toast.error('Error submitting form. Please try again later!', {
                     position: "top-right",
                     autoClose: 3000,
@@ -302,7 +303,7 @@ const User = () => {
             }
         } else {
             console.log('Form validation failed.');
-            
+
             toast.error('Please fill in all required fields!', {
                 position: "top-right",
                 autoClose: 3000,
@@ -317,7 +318,7 @@ const User = () => {
 
 
     const validateForm = () => {
-        let valid = true; 
+        let valid = true;
         const errors = {};
         if (!formValues.name.trim()) {
             errors.name = 'Name is required';
@@ -587,6 +588,8 @@ const User = () => {
                     <FormControl fullWidth>
                         <TextArea
                             label="BIO"
+                            size="small"
+                            focused
                             placeholder="Enter your bio here"
                         />
 
@@ -649,9 +652,12 @@ const User = () => {
                         </FormControl>
                     </Box>
                     <Box sx={{ mt: 4, textAlign: 'center' }}>
-                        <Button variant="contained" color="primary" onClick={handleFormSubmit}>
+                        {/* <Button variant="contained" color="primary" onClick={handleFormSubmit}>
                             Submit
-                        </Button>
+                        </Button> */}
+                        <Buttton variant="contained" color="primary" onClick={handleFormSubmit} name="Submit" />
+
+
                     </Box>
                 </Grid>
             </Grid>

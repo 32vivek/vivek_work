@@ -11,6 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TextField from "@mui/material/TextField";
 import { FormControl } from '@mui/material';
+import { Modal } from "@mui/material";
 
 const mapToAbbreviation = (value) => {
     switch (value) {
@@ -27,7 +28,7 @@ const mapToAbbreviation = (value) => {
     }
 };
 
-const WorkDetails = () => {
+const WorkDetails = ({ onSubmit, handleClose }) => {
     const [formValues, setFormValues] = useState({
         workingType: "",
         workingHrs: "",
@@ -75,7 +76,7 @@ const WorkDetails = () => {
         }
     };
 
-    console.log(workingData, "workingData");
+    // console.log(workingData, "workingData");
 
     const workingTypeOptions = [
         { name: "All Day and All Time" },
@@ -186,7 +187,6 @@ const WorkDetails = () => {
         }
     };
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (
@@ -218,9 +218,7 @@ const WorkDetails = () => {
             );
             console.log("API Response:", response.data);
             toast.success("Form submitted successfully!");
-            // Fetch updated data from the API
-            fetchWorkingData();
-            // Reset form values
+            fetchWorkingData()
             setFormValues({
                 workingType: "",
                 workingHrs: "",
@@ -234,6 +232,8 @@ const WorkDetails = () => {
                 toTime: "",
                 orgId: "",
             });
+            // Close modal
+            handleClose();
         } catch (error) {
             console.error("Error submitting data:", error);
             toast.error(
@@ -245,7 +245,7 @@ const WorkDetails = () => {
 
     return (
         <>
-            <ToastContainer />
+            <ToastContainer autoClose={7000} />
             <form onSubmit={handleSubmit}>
                 <Typography
                     id="transition-modal-title"
@@ -256,6 +256,8 @@ const WorkDetails = () => {
                 >
                     User Working Details
                 </Typography>
+                <hr style={{ margin: "10px auto", width: "50%", color: "#ccc" }} />
+
                 <Grid
                     container
                     spacing={2}
@@ -333,6 +335,7 @@ const WorkDetails = () => {
                                 id="outlined-required"
                                 required
                                 label="Module Name"
+                                size="small"
                                 variant="outlined"
                                 placeholder="Module Name"
                                 // focused
@@ -397,6 +400,7 @@ const WorkDetails = () => {
                             multiple={true}
                             data={data}
                             label="Select Days"
+                            size="small"
                             placeholder="Select Days"
                             onChange={(selectedDays) =>
                                 handleInputChange({

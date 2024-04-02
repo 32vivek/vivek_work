@@ -15,21 +15,22 @@ export default function TimePickerViewRenderers({ formValues, label, handleInput
             <FormControl fullWidth error={!!error}>
                 <TextField
                     fullWidth
-                    size="small"
+                    // size="small"
                     label={label}
                     type="time"
+                    size="small"
                     error={!!error}
                     value={selectedTime}
                     onChange={(e) => {
                         setSelectedTime(e.target.value);
                         handleInputChange({ target: { name, value: e.target.value } });
                     }}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    inputProps={{
-                        step: 300,
-                    }}
+                // InputLabelProps={{
+                //     shrink: true,
+                // }}
+                // inputProps={{
+                //     step: 300,
+                // }}
                 />
                 {error && (
                     <FormHelperText>{error}</FormHelperText>
