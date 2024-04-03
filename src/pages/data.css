@@ -8,3 +8,11 @@
         /* Adjust the height as needed */
     }
 }
+
+
+
+
+
+.react-data-table-component .pagination {
+    height: auto !important;
+}

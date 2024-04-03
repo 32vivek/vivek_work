@@ -11,6 +11,7 @@ import DataCountry from './pages/datacountry';
 import ContactDetails from './componet/contactform';
 import SignUp from './componet/Signup/Signup';
 import WorkingHours from './pages/workingHours';
+import UserTable from './pages/ReactDataTable';
 
 function App() {
 
@@ -31,6 +32,8 @@ function App() {
           <Route path='/contactdetails' element={<ContactDetails />} />
           <Route path='/workdetails' element={<WorkingHours />} />
           <Route path='/sign-up' element={<SignUp />} />
+          <Route path='/table' element={<UserTable />} />
+
         </Routes>
       </div>
     </BrowserRouter>

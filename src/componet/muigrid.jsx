@@ -6,7 +6,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
 import GetAppIcon from "@mui/icons-material/GetApp";
-import "./reactDatatable.css";
+// import "./reactDatatable.css";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -18,7 +18,7 @@ import { saveAs } from "file-saver";
 import AddIcon from "@mui/icons-material/Add";
 import { Fab } from "@mui/material";
 import { format } from "date-fns";
-import './reactDatatable.css';
+// import './muigrid.css';
 const PaginatorTemplateDemo = ({ onSubmit }) => {
     const [data, setData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);

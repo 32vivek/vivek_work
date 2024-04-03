@@ -180,7 +180,7 @@ const SideBar = ({ loggedInUser }) => {
                         <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                             <ListItemButton
                                 component={Link}
-                                to={index === 0 ? '/analytics' : (index === 2 ? '/workdetails' : (index === 3 ? '/datacountry' : (index === 4 ? '/user' : '/contact')))}
+                                to={index === 0 ? '/analytics' : (index === 2 ? '/workdetails' : (index === 3 ? '/table' : (index === 4 ? '/user' : '/contact')))}
                                 sx={{
                                     minHeight: 48,
                                     justifyContent: open ? 'initial' : 'flex-end',
