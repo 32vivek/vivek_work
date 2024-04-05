@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { FormControl } from '@mui/material';
 
-const Buttton = ({ onClick, name }) => {
+const Buttton = ({ onClick, name, style }) => {
     return (
 
         <div style={{ marginLeft: '150px', marginBottom: '30px' }}>
@@ -11,6 +11,7 @@ const Buttton = ({ onClick, name }) => {
                 <Button
                     variant="contained"
                     onClick={onClick}
+                    style={style}
                 // sx={{
                 //     transform: 'perspective(500px) rotateY(45deg)'
                 // }}

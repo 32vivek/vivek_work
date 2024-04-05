@@ -11,7 +11,9 @@ import DataCountry from './pages/datacountry';
 import ContactDetails from './componet/contactform';
 import SignUp from './componet/Signup/Signup';
 import WorkingHours from './pages/workingHours';
-import UserTable from './pages/ReactDataTable';
+// import UserForm from './pages/userform';
+// import Dataa from './React-Redux/data';
+import Reactdatatablepage from "./pages/reactdatatablepage"
 
 function App() {
 
@@ -32,7 +34,8 @@ function App() {
           <Route path='/contactdetails' element={<ContactDetails />} />
           <Route path='/workdetails' element={<WorkingHours />} />
           <Route path='/sign-up' element={<SignUp />} />
-          <Route path='/table' element={<UserTable />} />
+          {/* <Route path='/data' element={<Dataa />} /> */}
+          <Route path='/table' element={<Reactdatatablepage />} />
 
         </Routes>
       </div>

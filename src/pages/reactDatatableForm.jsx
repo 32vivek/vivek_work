@@ -11,7 +11,10 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import TextField from "@mui/material/TextField";
 import { FormControl } from '@mui/material';
-import { Modal } from "@mui/material";
+import { useDispatch } from 'react-redux';
+
+
+import { submitFormData } from "../React-Redux/slice/data";
 
 const mapToAbbreviation = (value) => {
     switch (value) {
@@ -27,8 +30,8 @@ const mapToAbbreviation = (value) => {
             return value;
     }
 };
-
-const WorkDetails = ({ onSubmit, handleClose }) => {
+const ReactDatatableForm = ({ handleClose, updateTableData }) => {
+    const dispatch = useDispatch();
     const [formValues, setFormValues] = useState({
         workingType: "",
         workingHrs: "",
@@ -42,7 +45,6 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
         toTime: "",
         orgId: "",
     });
-
     const [selectedOrgId, setSelectedOrgId] = useState("");
     const [isDayRangeHidden, setIsDayRangeHidden] = useState(false);
     const [isFromTimeHidden, setIsFromTimeHidden] = useState(false);
@@ -63,21 +65,6 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
         fromTime: null,
         toTime: null,
     });
-
-    const fetchWorkingData = async () => {
-        try {
-            const response = await axios.get(
-                "https://65a4e05752f07a8b4a3dd9b7.mockapi.io/auth"
-            );
-            const dataa = response.data;
-            setWorkingData(dataa);
-        } catch (error) {
-            console.error("Error fetching working data:", error);
-        }
-    };
-
-    // console.log(workingData, "workingData");
-
     const workingTypeOptions = [
         { name: "All Day and All Time" },
         { name: "All Day and Specific Time" },
@@ -105,10 +92,6 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
         { id: "4", name: "4" },
         { id: "5", name: "5" },
     ]);
-
-    useEffect(() => {
-        fetchWorkingData();
-    }, []);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -189,36 +172,20 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (
-            !formValues.workingType ||
-            !formValues.orgId ||
-            !formValues.departmentName ||
-            !formValues.holiday
-        ) {
+
+        if (!formValues.workingType || !formValues.orgId || !formValues.departmentName || !formValues.holiday) {
             setFormErrors({
                 ...formErrors,
                 workingType: !formValues.workingType ? "This field is required" : null,
                 orgId: !formValues.orgId ? "This field is required" : null,
-                departmentName: !formValues.departmentName
-                    ? "This field is required"
-                    : null,
+                departmentName: !formValues.departmentName ? "This field is required" : null,
                 holiday: !formValues.holiday ? "This field is required" : null,
             });
-            toast.error("Please fill in all required fields");
+
             return;
         }
-
         try {
-            const response = await axios.post(
-                "https://65a4e05752f07a8b4a3dd9b7.mockapi.io/auth",
-                {
-                    ...formValues,
-                    departmentId: formValues.departmentName,
-                }
-            );
-            console.log("API Response:", response.data);
-            toast.success("Form submitted successfully!");
-            fetchWorkingData()
+            await dispatch(submitFormData(formValues));
             setFormValues({
                 workingType: "",
                 workingHrs: "",
@@ -232,13 +199,12 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                 toTime: "",
                 orgId: "",
             });
-            // Close modal
+
             handleClose();
+            updateTableData()
         } catch (error) {
             console.error("Error submitting data:", error);
-            toast.error(
-                "An error occurred while submitting the form. Please try again."
-            );
+
         }
     };
 
@@ -269,6 +235,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                             formValues={formValues}
                             placeholder="Select Working Type"
                             name="workingType"
+                            // size="small"
                             options={workingTypeOptions}
                             handleInputChange={handleInputChange}
                             error={formErrors.workingType}
@@ -280,6 +247,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                             placeholder="Select Organization ID"
                             options={orgIdOptions}
                             value={selectedOrgId}
+                            // size="small"
                             name="orgId"
                             handleInputChange={handleInputChange}
                             error={formErrors.orgId}
@@ -290,6 +258,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                             placeholder="Department"
                             formValues={formValues}
                             options={department}
+                            // size="small"
                             name="departmentName"
                             handleInputChange={handleInputChange}
                             error={formErrors.departmentName}
@@ -300,6 +269,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                             placeholder="Holiday"
                             options={holidayOptions}
                             formValues={formValues}
+                            // size="small"
                             name="holiday"
                             handleInputChange={handleInputChange}
                             error={formErrors.holiday}
@@ -310,6 +280,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                             <Dropdown
                                 placeholder="From Day"
                                 options={data}
+                                // size="small"
                                 formValues={formValues}
                                 name="fromDay"
                                 handleInputChange={handleInputChange}
@@ -322,6 +293,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                             <Dropdown
                                 placeholder="To Day"
                                 options={data}
+                                // size="small"
                                 formValues={formValues}
                                 name="toDay"
                                 handleInputChange={handleInputChange}
@@ -356,6 +328,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                             <TimePickerViewRenderers
                                 label="Working Hours"
                                 name="workingHrs"
+                                // size="small"
                                 formValues={formValues}
                                 handleInputChange={handleInputChange}
                                 error={formErrors.workingHrs}
@@ -367,6 +340,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                             <TimePickerViewRenderers
                                 label="Non-Working Hours"
                                 name="nonWorkingHrs"
+                                // size="small"
                                 formValues={formValues}
                                 handleInputChange={handleInputChange}
                                 error={formErrors.nonWorkingHrs}
@@ -377,6 +351,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                         {!isFromTimeHidden && (
                             <TimePickerViewRenderers
                                 label="From Time"
+                                // size="small"
                                 name="fromTime"
                                 formValues={formValues}
                                 handleInputChange={handleInputChange}
@@ -388,6 +363,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                         {!isToTimeHidden && (
                             <TimePickerViewRenderers
                                 label="To Time"
+                                // size="small"
                                 name="toTime"
                                 formValues={formValues}
                                 handleInputChange={handleInputChange}
@@ -400,7 +376,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                             multiple={true}
                             data={data}
                             label="Select Days"
-                            size="small"
+                            // size="small"
                             placeholder="Select Days"
                             onChange={(selectedDays) =>
                                 handleInputChange({
@@ -418,7 +394,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                 </Grid>
             </form>
         </>
-    );
-};
+    )
+}
 
-export default WorkDetails;
+export default ReactDatatableForm
