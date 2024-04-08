@@ -6,7 +6,7 @@ import { FormControl } from '@mui/material';
 const Buttton = ({ onClick, name, style }) => {
     return (
 
-        <div style={{ marginLeft: '150px', marginBottom: '30px' }}>
+        <div style={{ marginBottom: '30px' }}>
             <FormControl>
                 <Button
                     variant="contained"

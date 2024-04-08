@@ -14,6 +14,7 @@ const Texxt = ({ formValues, formErrors, handleInputChange, label, placeholder, 
                 id={name}
                 label={label}
                 size="small"
+
                 focused
                 // variant="filled"
                 placeholder={placeholder}

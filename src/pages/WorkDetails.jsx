@@ -261,9 +261,9 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                 <Grid
                     container
                     spacing={2}
-                    style={{ width: "90%", marginLeft: "35px", marginTop: "10px" }}
+                    style={{ width: "100%", marginTop: "10px" }}
                 >
-                    <Grid item lg={4} xs={12} md={6}>
+                    <Grid item lg={4} xs={6} md={6}>
                         <Dropdown
                             label="Working Type"
                             formValues={formValues}
@@ -274,7 +274,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                             error={formErrors.workingType}
                         />
                     </Grid>
-                    <Grid item lg={4} xs={12} md={6}>
+                    <Grid item lg={4} xs={6} md={6}>
                         <Dropdown
                             label="Organization ID"
                             placeholder="Select Organization ID"
@@ -285,7 +285,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                             error={formErrors.orgId}
                         />
                     </Grid>
-                    <Grid item lg={4} xs={12} md={6}>
+                    <Grid item lg={4} xs={6} md={6}>
                         <Dropdown
                             placeholder="Department"
                             formValues={formValues}
@@ -295,7 +295,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                             error={formErrors.departmentName}
                         />
                     </Grid>
-                    <Grid item lg={4} xs={12} md={6}>
+                    <Grid item lg={4} xs={6} md={6}>
                         <Dropdown
                             placeholder="Holiday"
                             options={holidayOptions}
@@ -305,7 +305,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                             error={formErrors.holiday}
                         />
                     </Grid>
-                    <Grid item lg={4} xs={12} md={6}>
+                    <Grid item lg={4} xs={6} md={6}>
                         {!isDayRangeHidden && (
                             <Dropdown
                                 placeholder="From Day"
@@ -317,7 +317,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                             />
                         )}
                     </Grid>
-                    <Grid item lg={4} xs={12} md={6}>
+                    <Grid item lg={4} xs={6} md={6}>
                         {!isDayRangeHidden && (
                             <Dropdown
                                 placeholder="To Day"
@@ -329,7 +329,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                             />
                         )}
                     </Grid>
-                    <Grid item lg={4} xs={12} md={6}>
+                    <Grid item lg={4} xs={6} md={6}>
                         <FormControl fullWidth>
                             <TextField
                                 id="outlined-required"
@@ -351,7 +351,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                         </FormControl>
                     </Grid>
 
-                    <Grid item lg={4} xs={12} md={6}>
+                    <Grid item lg={4} xs={6} md={6}>
                         {!isWorkingHoursHidden && (
                             <TimePickerViewRenderers
                                 label="Working Hours"
@@ -362,7 +362,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                             />
                         )}
                     </Grid>
-                    <Grid item lg={4} xs={12} md={6}>
+                    <Grid item lg={4} xs={6} md={6}>
                         {!isNonWorkingHoursHidden && (
                             <TimePickerViewRenderers
                                 label="Non-Working Hours"
@@ -373,7 +373,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                             />
                         )}
                     </Grid>
-                    <Grid item lg={4} xs={12} md={6}>
+                    <Grid item lg={4} xs={6} md={6}>
                         {!isFromTimeHidden && (
                             <TimePickerViewRenderers
                                 label="From Time"
@@ -384,7 +384,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                             />
                         )}
                     </Grid>
-                    <Grid item lg={4} xs={12} md={6}>
+                    <Grid item lg={4} xs={6} md={6}>
                         {!isToTimeHidden && (
                             <TimePickerViewRenderers
                                 label="To Time"
@@ -395,7 +395,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                             />
                         )}
                     </Grid>
-                    <Grid item lg={4} xs={12} md={6}>
+                    <Grid item lg={4} xs={6} md={6}>
                         <Autocmp
                             multiple={true}
                             data={data}
@@ -409,13 +409,14 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                             }
                         />
                     </Grid>
-                    <Grid item xs={12}>
-                        <Stack marginLeft="100px" mt="20px">
-                            <Buttton onClick={handleSubmit} name="Save Data"
-                            />
-                        </Stack>
-                    </Grid>
+
                 </Grid>
+                {/* <Grid item xs={6}> */}
+                <Stack display="flex" justifyContent="center" alignItems="center" mt="20px">
+                    <Buttton onClick={handleSubmit} name="Save Data"
+                    />
+                </Stack>
+                {/* </Grid> */}
             </form>
         </>
     );
