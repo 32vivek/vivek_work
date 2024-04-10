@@ -1,5 +1,7 @@
+
+
 import React, { useEffect, useState } from "react";
-import { ToastContainer, toast, setToastProps } from 'react-toastify';
+// import { ToastContainer, toast, setToastProps } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // import { ToastContainer, setToastProps } from 'react-toastify';
 import { useDispatch, useSelector } from "react-redux";
@@ -11,7 +13,7 @@ import Grid from "@mui/material/Grid";
 import { Paper, Button, Typography } from "@mui/material";
 import { Box, TextField } from "@material-ui/core";
 import { Search as SearchIcon } from "@mui/icons-material";
-import CircularProgress from "@mui/material/CircularProgress";
+import LinearProgress from '@mui/material/LinearProgress';
 import * as XLSX from "xlsx";
 import ReactDatatableForm from "../pages/reactDatatableForm";
 import Backdrop from "@mui/material/Backdrop";
@@ -22,20 +24,28 @@ import DownloadIcon from "@mui/icons-material/Download";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from '@mui/icons-material/Delete';
 // import { ToastContainer, toast } from 'react-toastify'; 
-import 'react-toastify/dist/ReactToastify.css';
+// import 'react-toastify/dist/ReactToastify.css';
 import Swal from 'sweetalert2';
-
-
+import "./reactDatatable.css";
+import CircularProgress from '@mui/material/CircularProgress';
+import './reactDatatable.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const UserForm = () => {
     const dispatch = useDispatch();
     const state = useSelector((state) => state.todo);
     const [editingUser, setEditingUser] = useState(null);
     const [formValues, setFormValues] = useState(null);
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
-        dispatch(fetchTodos());
+        setTimeout(() => {
+            setLoading(true)
+            dispatch(fetchTodos());
+            setLoading(false);
+        }, 1000);
     }, [dispatch]);
 
-    const { loading, error, data } = state;
+    const { error, data } = state;
 
     // console.log("State", state);
 
@@ -48,18 +58,59 @@ const UserForm = () => {
 
 
     const handleEdit = (formData) => {
-        console.log(formData, "daa");
-        dispatch(updateItem({ itemId: editingUser.id, formData }))
-            .then(() => {
-                setOpen(false);
-                toast.success('Item updated successfully!');
-                dispatch(fetchTodos());
-            })
-            .catch((error) => {
-                console.error("Error updating item:", error);
-                toast.error("Error updating item. Please try again later.");
-            });
+        Swal.fire({
+            title: 'Confirm Edit',
+            text: 'Are you sure you want to edit this item?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, edit it!',
+            cancelButtonText: 'No, cancel!',
+            width: '300px', // Set the width
+            // height: '100px',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false,
+            reverseButtons: true,
+            focusConfirm: false,
+            position: 'top', // Position the dialog at the top
+            customClass: {
+                container: 'custom-swal-container',
+            },
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                dispatch(updateItem({ itemId: editingUser.id, formData }))
+                    .then(() => {
+                        // Display the "Updated" message on top of the modal
+                        Swal.fire({
+                            title: 'Updated!',
+                            text: 'Your item has been updated.',
+                            icon: 'success',
+                            width: '300px', // Set the width
+                            // height: '100px',
+                            position: 'top', // Position the dialog at the top
+                            customClass: {
+                                container: 'custom-swal-container',
+                            },
+                        });
+
+                        // Close the modal
+                        handleClose();
+
+                        // Fetch updated data
+                        dispatch(fetchTodos());
+                    })
+                    .catch((error) => {
+                        console.error("Error updating item:", error);
+                        toast.error("Error updating item. Please try again later.");
+                    });
+            }
+        });
     };
+
+
+
 
 
     const handleClose = () => setOpen(false);
@@ -179,6 +230,7 @@ const UserForm = () => {
             style: {
                 fontWeight: "bold",
                 position: "sticky",
+
             },
         },
     };
@@ -215,25 +267,33 @@ const UserForm = () => {
     const handleDelete = (itemId) => {
         Swal.fire({
             title: 'Are you sure?',
+            text: 'You will not be able to recover this item!',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, delete it!',
-            width: '400px',
+            cancelButtonText: 'No, cancel!',
+            width: '350px',
+            height: '280px',
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
                     await dispatch(deleteItem(itemId));
+                    Swal.fire(
+                        'Deleted!',
+                        'Your item has been deleted.',
+                        'success',
 
-                    toast.success('Item deleted successfully!', {
-                        position: toast.POSITION.TOP_CENTER
-                    });
+
+                    );
                     dispatch(fetchTodos());
                 } catch (error) {
-                    toast.success('Item deleted successfully!', {
-                        // position: toast.POSITION.TOP_CENTER
-                    });
+                    Swal.fire(
+                        'Error!',
+                        'Failed to delete the item.',
+                        'error'
+                    );
                 }
             }
         });
@@ -242,10 +302,11 @@ const UserForm = () => {
 
 
 
+
     return (
         <div>
             <ToastContainer />
-            {loading && <CircularProgress />}
+            {/* {loading && <CircularProgress />} */}
             {error && <div>Error: {error}</div>}
             <div>
                 <Grid container>
@@ -291,7 +352,7 @@ const UserForm = () => {
                                     </Button>
                                 </span>
                             </Box>
-                            <div style={{ height: "400px", overflowY: "auto" }}>
+                            <div  >
                                 <DataTable
                                     columns={columns}
                                     data={filteredItems || []}
@@ -304,6 +365,10 @@ const UserForm = () => {
                                     paginationRowsPerPageOptions={[10, 20, 50]}
                                     highlightOnHover
                                     striped
+                                    fixedHeader
+                                    progressPending={loading}
+                                    progressComponent={<CircularProgress color="secondary" />
+                                    }
                                 />
                             </div>
                         </Paper>
@@ -314,6 +379,7 @@ const UserForm = () => {
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
                 open={open}
+
                 onClose={handleClose}
                 closeAfterTransition
                 BackdropComponent={Backdrop}
@@ -322,13 +388,13 @@ const UserForm = () => {
                     <Box
                         sx={{
                             position: "absolute",
-                            top: "48%",
+                            top: "42%",
                             left: "50%",
                             transform: "translate(-50%, -50%)",
-                            width: "100%",
-                            maxWidth: 800,
+                            width: "80%",
+                            maxWidth: "80%",
                             bgcolor: "background.paper",
-                            p: 3,
+                            p: 2,
                         }}
                     >
                         <ReactDatatableForm

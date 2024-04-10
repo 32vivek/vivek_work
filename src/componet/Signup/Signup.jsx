@@ -33,9 +33,35 @@ export default function SignUp() {
         }));
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(formData);
+
+        try {
+            // Send sign-up data to the server for registration
+            const response = await fetch('http://your-api.com/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Handle successful sign-up
+                console.log('Sign-up successful!', data);
+
+                // Redirect the user to a protected route or dashboard
+                // For example:
+                // history.push('/dashboard');
+            } else {
+                // Handle sign-up error
+                console.error('Sign-up error:', data.error);
+            }
+        } catch (error) {
+            console.error('Sign-up error:', error);
+        }
     };
 
     return (
@@ -66,10 +92,11 @@ export default function SignUp() {
                                     <TextField
                                         autoComplete="given-name"
                                         name="firstName"
-                                        required
+                                        // required
                                         fullWidth
+                                        size="small"
                                         id="firstName"
-                                        label="First Name"
+                                        label={<span>First Name<span style={{ color: 'red' }}>*</span></span>}
                                         autoFocus
                                         value={formData.firstName}
                                         onChange={handleChange}
@@ -84,10 +111,11 @@ export default function SignUp() {
                                 </Grid>
                                 <Grid item xs={12}  >
                                     <TextField
-                                        required
+                                        // required
                                         fullWidth
+                                        size="small"
                                         id="lastName"
-                                        label="Last Name"
+                                        label={<span>Last Name<span style={{ color: 'red' }}>*</span></span>}
                                         name="lastName"
                                         autoComplete="family-name"
                                         value={formData.lastName}
@@ -103,10 +131,11 @@ export default function SignUp() {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
-                                        required
+                                        // required
                                         fullWidth
+                                        size="small"
                                         id="email"
-                                        label="Email Address"
+                                        label={<span>Email Address<span style={{ color: 'red' }}>*</span></span>}
                                         name="email"
                                         autoComplete="email"
                                         value={formData.email}
@@ -122,10 +151,11 @@ export default function SignUp() {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <TextField
-                                        required
+                                        // required
                                         fullWidth
+                                        size="small"
                                         name="password"
-                                        label="Password"
+                                        label={<span>Password<span style={{ color: 'red' }}>*</span></span>}
                                         type="password"
                                         id="password"
                                         autoComplete="new-password"
@@ -144,6 +174,7 @@ export default function SignUp() {
                             <Button
                                 type="submit"
                                 fullWidth
+                                size='small'
                                 variant="contained"
                                 sx={{ mt: 3, mb: 2 }}
                             >

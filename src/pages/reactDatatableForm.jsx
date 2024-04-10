@@ -3,20 +3,18 @@ import Dropdown from "../componet/dropdown";
 import Grid from "@mui/material/Grid";
 import TimePickerViewRenderers from "../componet/timepicker";
 import Stack from "@mui/material/Stack";
-// import Button from "./../componet/button";  
 import Autocmp from "./../componet/autocom";
 import Typography from "@mui/material/Typography";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import TextField from "@mui/material/TextField";
 import { FormControl } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { submitFormData } from "../React-Redux/slice/data";
-import { toast } from 'react-toastify';
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Button from '@mui/material/Button';
-
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const mapToAbbreviation = (value) => {
     switch (value) {
         case "All Day and All Time":
@@ -34,7 +32,7 @@ const mapToAbbreviation = (value) => {
 
 const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleEdit }) => {
     const dispatch = useDispatch();
-    const [formValues, setFormValues] = useState(editingUser || {
+    const initialFormValues = {
         workingType: "",
         workingHrs: "",
         departmentName: "",
@@ -46,38 +44,38 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
         fromTime: "",
         toTime: "",
         orgId: "",
-    });
+    };
 
+    const [formValues, setFormValues] = useState(editingUser || initialFormValues);
+    const [workingType, setWorkingType] = useState("");
+    const [workingHrs, setWorkingHrs] = useState("");
     const [selectedOrgId, setSelectedOrgId] = useState("");
     const [isDayRangeHidden, setIsDayRangeHidden] = useState(false);
     const [isFromTimeHidden, setIsFromTimeHidden] = useState(false);
     const [isToTimeHidden, setIsToTimeHidden] = useState(false);
     const [isWorkingHoursHidden, setIsWorkingHoursHidden] = useState(false);
     const [isNonWorkingHoursHidden, setIsNonWorkingHoursHidden] = useState(false);
-    const [formErrors, setFormErrors] = useState({
-        workingType: null,
-        orgId: null,
-        departmentName: null,
-        holiday: null,
-        moduleName: null,
-        fromDay: null,
-        toDay: null,
-        workingHrs: null,
-        nonWorkingHrs: null,
-        fromTime: null,
-        toTime: null,
-    });
-    const workingTypeOptions = [
-        { name: "All Day and All Time" },
-        { name: "All Day and Specific Time" },
-        { name: "Specific Day and All Time" },
-        { name: "Specific Day and Specific Time" },
-    ];
+    const [error, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const validateForm = () => {
+        if (
+            formValues.workingType === "" ||
+            formValues.orgId === "" ||
+            formValues.departmentName === "" ||
+            formValues.holiday === "" ||
+            formValues.moduleName === "" ||
+            formValues.day.length === 0
+        ) {
+            setError(true);
+            setErrorMessage("Please fill out all required fields.");
+            return false;
+        }
+        return true;
+    };
 
     const holidayOptions = [{ name: "yes" }, { name: "no" }];
-
     const department = [{ name: "marketing" }, { name: " developement" }];
-
     const data = [
         { name: "Monday" },
         { name: "Tuesday" },
@@ -87,6 +85,13 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
         { name: "Saturday" },
         { name: "Sunday" },
     ];
+    const workingTypeOptions = [
+        { name: "All Day and All Time" },
+        { name: "All Day and Specific Time" },
+        { name: "Specific Day and All Time" },
+        { name: "Specific Day and Specific Time" },
+    ];
+
     const [orgIdOptions] = useState([
         { id: "1", name: "1" },
         { id: "2", name: "2" },
@@ -131,25 +136,17 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
     };
 
     useEffect(() => {
+        console.log("Editing user:", editingUser);
         if (editingUser) {
             updateFormVisibility(editingUser.workingType);
+            setFormValues(editingUser);
+            setWorkingType(editingUser.workingType);
+            setWorkingHrs(editingUser.workingHrs);
         }
     }, [editingUser]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-
-        if (!Array.isArray(value) && value.trim() === "" && name !== "holiday") {
-            setFormErrors((prevErrors) => ({
-                ...prevErrors,
-                [name]: "This field is required",
-            }));
-        } else {
-            setFormErrors((prevErrors) => ({
-                ...prevErrors,
-                [name]: null,
-            }));
-        }
 
         if (name === "day") {
             setFormValues((prevValues) => ({
@@ -170,7 +167,15 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                         ...prevValues,
                         [name]: mappedValue,
                     }));
+                    setWorkingType(mappedValue);
                     updateFormVisibility(mappedValue);
+                    break;
+                case "workingHrs":
+                    setFormValues((prevValues) => ({
+                        ...prevValues,
+                        [name]: value,
+                    }));
+                    setWorkingHrs(value);
                     break;
                 default:
                     setFormValues({
@@ -184,39 +189,69 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // Validate form before submission
+        let isValid = validateForm();
+
+        if (!isValid) {
+            return;
+        }
+
+        // Attempt to submit the form data
         if (editingUser) {
             handleEdit(formValues);
         } else {
             dispatch(submitFormData(formValues))
                 .then(() => {
-                    setFormValues({
-                        workingType: "",
-                        workingHrs: "",
-                        departmentName: "",
-                        holiday: "",
-                        moduleName: "",
-                        fromDay: "",
-                        toDay: "",
-                        day: [],
-                        fromTime: "",
-                        toTime: "",
-                        orgId: "",
-                    });
+                    setFormValues(initialFormValues);
                     handleClose();
                     updateTableData();
-                    toast.success("Form submitted successfully!");
+                    // Show success toast message
+                    toast.success('Form submitted successfully!', {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
                 })
                 .catch((error) => {
                     console.error("Error submitting data:", error);
-                    toast.error("Error submitting form. Please try again later.");
+                    // Show error toast message
+                    toast.error('Error submitting form. Please try again later!', {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
                 });
         }
+    };
+    console.log("Form Values:", formValues);
+
+    const handleClearForm = () => {
+        setFormValues(initialFormValues);
+        setWorkingType("");
+        setWorkingHrs("");
+        setError(false);
+        setErrorMessage("");
     };
 
     return (
         <>
-            <ToastContainer autoClose={9000} />
+            {/* <ToastContainer autoClose={9000} /> */}
+            <ToastContainer />
             <form onSubmit={handleSubmit}>
+                {error && (
+                    <Typography variant="body2" color="error" align="center">
+                        {errorMessage}
+                    </Typography>
+                )}
                 <IconButton
                     aria-label="close"
                     onClick={handleClose}
@@ -231,9 +266,9 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                     display="flex"
                     justifyContent="center"
                 >
-                    {editingUser ? 'Edit User' : 'Register New User'}
+                    {editingUser ? 'Edit User Details' : 'Register New User'}
                 </Typography>
-                <hr style={{ margin: "10px auto", width: "30%", color: "#ccc" }} />
+                <hr style={{ marginTop: "10px", width: "30%", color: "black" }} />
 
                 <Grid
                     container
@@ -241,46 +276,78 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                     style={{ width: "100%", marginTop: "10px" }}
                 >
                     <Grid item lg={4} xs={6} md={6}>
-                        <Dropdown
-                            label="Working Type"
-                            formValues={formValues}
-                            placeholder="Select Working Type"
-                            name="workingType"
-                            options={workingTypeOptions}
-                            handleInputChange={handleInputChange}
-                            error={formErrors.workingType}
-                        />
+
+                        <FormControl fullWidth error={error && formValues.workingType === ""}>
+
+
+                            <Dropdown
+                                // label="Working Type"
+                                formValues={formValues.workingType}
+                                placeholder="Select Working Type"
+                                name="workingType"
+                                options={workingTypeOptions}
+                                handleInputChange={handleInputChange}
+                                selectedValue={formValues.workingType}
+                            />
+                            {error && formValues.workingType === "" && (
+                                <Typography variant="caption" color="error">
+                                    Please select Working Type.
+                                </Typography>
+                            )}
+                        </FormControl>
+
                     </Grid>
                     <Grid item lg={4} xs={6} md={6}>
-                        <Dropdown
-                            label="Organization ID"
-                            placeholder="Select Organization ID"
-                            options={orgIdOptions}
-                            value={selectedOrgId}
-                            name="orgId"
-                            handleInputChange={handleInputChange}
-                            error={formErrors.orgId}
-                        />
+                        <FormControl fullWidth error={error && formValues.orgId === ""}>
+                            <Dropdown
+                                // label="Organization ID"
+                                placeholder="Select Organization ID"
+                                options={orgIdOptions}
+                                formValues={formValues}
+                                value={selectedOrgId}
+                                name="orgId"
+                                handleInputChange={handleInputChange}
+                            />
+                            {error && formValues.orgId === "" && (
+                                <Typography variant="caption" color="error">
+                                    Please select Organization ID.
+                                </Typography>
+                            )}
+                        </FormControl>
                     </Grid>
                     <Grid item lg={4} xs={6} md={6}>
-                        <Dropdown
-                            placeholder="Department"
-                            formValues={formValues}
-                            options={department}
-                            name="departmentName"
-                            handleInputChange={handleInputChange}
-                            error={formErrors.departmentName}
-                        />
+                        <FormControl fullWidth error={error && formValues.departmentName === ""}>
+                            <Dropdown
+                                placeholder="Department"
+                                formValues={formValues}
+                                options={department}
+                                name="departmentName"
+                                handleInputChange={handleInputChange}
+                                value={formValues.departmentName}
+                            />
+                            {error && formValues.departmentName === "" && (
+                                <Typography variant="caption" color="error">
+                                    Please select Department Name.
+                                </Typography>
+                            )}
+                        </FormControl>
                     </Grid>
                     <Grid item lg={4} xs={6} md={6}>
-                        <Dropdown
-                            placeholder="Holiday"
-                            options={holidayOptions}
-                            formValues={formValues}
-                            name="holiday"
-                            handleInputChange={handleInputChange}
-                            error={formErrors.holiday}
-                        />
+                        <FormControl fullWidth error={error && formValues.holiday === ""}>
+                            <Dropdown
+                                placeholder="Holiday"
+                                options={holidayOptions}
+                                formValues={formValues}
+                                name="holiday"
+                                handleInputChange={handleInputChange}
+                                value={formValues.holiday}
+                            />
+                            {error && formValues.orgId === "" && (
+                                <Typography variant="caption" color="error">
+                                    Please select Holiday.
+                                </Typography>
+                            )}
+                        </FormControl>
                     </Grid>
                     <Grid item lg={4} xs={6} md={6}>
                         <FormControl fullWidth>
@@ -297,23 +364,34 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                                 style={{
                                     padding: "0px",
                                 }}
-                                error={formErrors.moduleName !== null}
-                                helperText={formErrors.moduleName}
                             />
+
                         </FormControl>
                     </Grid>
                     <Grid item lg={4} xs={6} md={6}>
-                        <Autocmp
-                            multiple={true}
-                            data={data}
-                            label="Select Days"
-                            placeholder="Select Days"
-                            onChange={(selectedDays) =>
-                                handleInputChange({
-                                    target: { name: "day", value: selectedDays },
-                                })
-                            }
-                        />
+                        <FormControl fullWidth error={error && formValues.day.length === 0}>
+                            <Autocomplete
+                                multiple
+                                options={data}
+                                size="small"
+                                limitTags={1}
+                                getOptionLabel={(option) => option?.name || ''}
+                                renderInput={(params) => <TextField {...params} label="Select Days" />}
+                                onChange={(event, value) => {
+                                    if (value) {
+                                        handleInputChange({ target: { name: 'day', value: value.map(option => option?.name || '') } });
+                                    } else {
+                                        handleInputChange({ target: { name: 'day', value: [] } });
+                                    }
+                                }}
+                                value={formValues.day || []}
+                            />
+                            {error && formValues.day.length === 0 && (
+                                <Typography variant="caption" color="error">
+                                    Please select at least one day.
+                                </Typography>
+                            )}
+                        </FormControl>
                     </Grid>
                     <Grid item lg={4} xs={6} md={6}>
                         {!isDayRangeHidden && (
@@ -323,7 +401,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                                 formValues={formValues}
                                 name="fromDay"
                                 handleInputChange={handleInputChange}
-                                error={formErrors.fromDay}
+                                value={formValues.fromDay}
                             />
                         )}
                     </Grid>
@@ -335,7 +413,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                                 formValues={formValues}
                                 name="toDay"
                                 handleInputChange={handleInputChange}
-                                error={formErrors.toDay}
+                                value={formValues.toDay}
                             />
                         )}
                     </Grid>
@@ -347,19 +425,22 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                                 name="nonWorkingHrs"
                                 formValues={formValues}
                                 handleInputChange={handleInputChange}
-                                error={formErrors.nonWorkingHrs}
+                                value={formValues.nonWorkingHrs}
                             />
                         )}
                     </Grid>
                     <Grid item lg={4} xs={6} md={6}>
                         {!isFromTimeHidden && (
+
                             <TimePickerViewRenderers
                                 label="From Time"
                                 name="fromTime"
                                 formValues={formValues}
                                 handleInputChange={handleInputChange}
-                                error={formErrors.fromTime}
+                                value={formValues.fromTime}
                             />
+
+
                         )}
                     </Grid>
                     <Grid item lg={4} xs={6} md={6}>
@@ -369,7 +450,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                                 name="toTime"
                                 formValues={formValues}
                                 handleInputChange={handleInputChange}
-                                error={formErrors.toTime}
+                                value={formValues.toTime}
                             />
                         )}
                     </Grid>
@@ -380,16 +461,28 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                                 name="workingHrs"
                                 formValues={formValues}
                                 handleInputChange={handleInputChange}
-                                error={formErrors.workingHrs}
+                                value={formValues.workingHrs}
                             />
                         )}
                     </Grid>
                 </Grid>
+                <hr style={{ marginTop: "30px", width: "100%", color: "black" }} />
 
-                <Stack mt="20px" display="flex" justifyContent="center" alignItems="center">
-                    <Button onClick={handleSubmit} variant="contained" color="success">
+                <Stack mt="20px" display="flex" flexDirection="row" justifyContent="center" alignItems="center">
+
+
+                    <Button onClick={handleSubmit} variant="contained" color="success" size="small">
                         {editingUser ? 'Update' : 'Register'}
                     </Button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <Button variant="contained" size="small" onClick={handleClose} style={{ backgroundColor: "#D3D3D3", color: 'black' }}>
+                        Close
+                    </Button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <Button variant="contained" size="small" onClick={handleClearForm} style={{ backgroundColor: "#D3D3D3", color: 'black' }}>
+                        Reset Form
+                    </Button>
+
                 </Stack>
             </form>
         </>

@@ -1,34 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { FormControl } from '@mui/material';
 import { FormHelperText } from '@mui/material';
 
-function Dropdown({ placeholder, options, name, handleInputChange, error }) {
+function Dropdown({ placeholder, options, name, handleInputChange, formValues, error, label }) {
     const [selectedValue, setSelectedValue] = useState('');
+
+    useEffect(() => {
+        // console.log("Form Values:", formValues);
+        setSelectedValue(formValues[name] || '');
+    }, [formValues[name]]);
+
 
     const handleChange = (event) => {
         const selectedValue = event.target.value;
+        console.log("Selected Value before update:", selectedValue);
         setSelectedValue(selectedValue);
         handleInputChange({ target: { name, value: selectedValue } });
+        console.log("Selected Value after update:", selectedValue);
     };
+
+    console.log("Render: Selected Value:", selectedValue);
+
 
     return (
         <div>
-            <FormControl fullWidth error={error !== null}>
+            <FormControl fullWidth error={error}>
                 <Select
                     value={selectedValue}
                     onChange={handleChange}
+                    label={label}
                     displayEmpty
                     size="small"
-                // style={{
-                //     height: '40px',
-                //     fontSize: '0.8rem',
-                //     padding: '6px 12px',
-                // }}
                 >
                     <MenuItem value="" disabled>
-                        {placeholder}
+                        {placeholder} <span style={{ color: 'red' }}>*</span>
                     </MenuItem>
                     {options && options.map((option, index) => (
                         <MenuItem key={index} value={option.name}>
@@ -36,9 +43,7 @@ function Dropdown({ placeholder, options, name, handleInputChange, error }) {
                         </MenuItem>
                     ))}
                 </Select>
-                {error && (
-                    <FormHelperText>{error}</FormHelperText>
-                )}
+                {error && <FormHelperText>Please select an option</FormHelperText>}
             </FormControl>
         </div>
     );

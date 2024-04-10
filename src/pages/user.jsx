@@ -221,19 +221,19 @@ const User = () => {
                 checkboxData: selectedCheckboxes
             }));
 
-            console.log('Form submitted:', {
-                // name: formValues.name,
-                email: formValues.email,
-                country: formValues.country,
-                state: formValues.state,
-                checkboxData: selectedCheckboxes,
-                file: file,
-                fullName: fullName,
-                address: formValues.address,
-                qualification: formValues.qualification,
-                // gender: gender,
-                gender: selectedRadio,
-            });
+            // console.log('Form submitted:', {
+            //     // name: formValues.name,
+            //     email: formValues.email,
+            //     country: formValues.country,
+            //     state: formValues.state,
+            //     checkboxData: selectedCheckboxes,
+            //     file: file,
+            //     fullName: fullName,
+            //     address: formValues.address,
+            //     qualification: formValues.qualification,
+            //     // gender: gender,
+            //     gender: selectedRadio,
+            // });
 
 
             const formData = new FormData();

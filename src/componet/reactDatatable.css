@@ -15,3 +15,12 @@
 }
 
  
+  .custom-swal-container {
+      z-index: 2001;
+      /* Ensure the dialog appears above the modal */
+  }
+
+  .custom-swal-container .swal2-popup {
+      height: 300px;
+      /* Adjust the height as needed */
+  }

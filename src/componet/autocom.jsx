@@ -5,14 +5,14 @@ import { FormControl } from "@mui/material";
 
 const Autocmp = ({ data, label, placeholder, onChange, defaultValue, multiple, handleStateChange, style }) => {
 
-
     const defaultOption = data.find(option => option.name === (defaultValue && defaultValue.name));
 
-    // If defaultOption is not null, use its value; otherwise, use defaultValue
     const defaultValueToUse = defaultOption || defaultValue;
 
     const handleSelectionChange = (event, value) => {
-        onChange(value);
+        onChange({
+            target: { name: "day", value: value },
+        });
         if (handleStateChange) {
             handleStateChange(value);
         }
@@ -34,7 +34,6 @@ const Autocmp = ({ data, label, placeholder, onChange, defaultValue, multiple, h
                 renderInput={(params) => (
                     <TextField {...params} label={label} placeholder={placeholder} color="primary" focused />
                 )}
-            // sx={{ width: '385px' }}
             />
         </FormControl>
     );
