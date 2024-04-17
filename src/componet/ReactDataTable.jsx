@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from "react";
 // import { ToastContainer, toast, setToastProps } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -31,12 +29,15 @@ import CircularProgress from '@mui/material/CircularProgress';
 import './reactDatatable.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 const UserForm = () => {
     const dispatch = useDispatch();
     const state = useSelector((state) => state.todo);
     const [editingUser, setEditingUser] = useState(null);
     const [formValues, setFormValues] = useState(null);
     const [loading, setLoading] = useState(true);
+
+
     useEffect(() => {
         setTimeout(() => {
             setLoading(true)
@@ -393,6 +394,8 @@ const UserForm = () => {
                             transform: "translate(-50%, -50%)",
                             width: "80%",
                             maxWidth: "80%",
+                            maxHeight: '50vh', // Set max height to 80% of the viewport height
+                            overflowY: 'auto', // Enable vertical scrolling
                             bgcolor: "background.paper",
                             p: 2,
                         }}

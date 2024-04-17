@@ -18,18 +18,19 @@ import { saveAs } from "file-saver";
 import AddIcon from "@mui/icons-material/Add";
 import { Fab } from "@mui/material";
 import { format } from "date-fns";
+import { muiTable_API } from "../API/Api";
 // import './muigrid.css';
 const PaginatorTemplateDemo = ({ onSubmit }) => {
     const [data, setData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [open, setOpen] = useState(false);
     const [pageSize, setPageSize] = useState(25);
-
+    const [isDisabled, setIsDisabled] = useState(true);
     useEffect(() => {
         const fetchWorkingData = async () => {
             try {
                 const response = await axios.get(
-                    "https://65a4e05752f07a8b4a3dd9b7.mockapi.io/auth"
+                    `${muiTable_API}`
                 );
                 const formattedData = response.data.map((item) => ({
                     ...item,
@@ -80,7 +81,7 @@ const PaginatorTemplateDemo = ({ onSubmit }) => {
     const handleFormSubmit = async (formData) => {
         try {
             const response = await axios.post(
-                "https://65a4e05752f07a8b4a3dd9b7.mockapi.io/auth",
+                `${muiTable_API}`,
                 formData
             );
             console.log("Form submitted:", response.data);
@@ -123,8 +124,13 @@ const PaginatorTemplateDemo = ({ onSubmit }) => {
                         variant="filled"
                         onChange={handleFilterChange}
                     />
-                    <Fab color="primary" aria-label="add" onClick={handleOpen}>
-                        <AddIcon style={{ color: "white" }} />
+                    <Fab
+                        color="primary"
+                        aria-label="add"
+                        onClick={handleOpen}
+                        disabled={isDisabled} // Set disabled prop based on state
+                    >
+                        <AddIcon style={{ color: 'white' }} />
                     </Fab>
                 </div>
                 <DataGrid

@@ -1,196 +1,217 @@
-import React, { useState } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import './sign.css';
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import bg from "../../pages/bg/signin.svg";
+import bgimg from "../../pages/bg/backimg.jpg";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import { useState, forwardRef } from "react";
+import Snackbar from "@mui/material/Snackbar";
+import Stack from "@mui/material/Stack";
+import MuiAlert from "@mui/material/Alert";
+import Slide from "@mui/material/Slide";
+import { useNavigate } from "react-router-dom";
 
-const defaultTheme = createTheme();
+const Alert = forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
-export default function SignUp() {
-    const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-        allowExtraEmails: false,
-    });
+const darkTheme = createTheme({
+    palette: {
+        mode: "dark",
+    },
+});
 
-    const handleChange = (event) => {
-        const { name, value, checked } = event.target;
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: name === 'allowExtraEmails' ? checked : value,
-        }));
-    };
+const boxstyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "75%",
+    height: "70%",
+    bgcolor: "background.paper",
+    boxShadow: 24,
+};
+
+const center = {
+    position: "relative",
+    top: "50%",
+    left: "30%",
+};
+
+export default function Register() {
+    const [open, setOpen] = useState(false);
+    const [remember, setRemember] = useState(false);
+    const vertical = "top";
+    const horizontal = "right";
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
+        setOpen(true);
         event.preventDefault();
-
-        try {
-            // Send sign-up data to the server for registration
-            const response = await fetch('http://your-api.com/signup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                // Handle successful sign-up
-                console.log('Sign-up successful!', data);
-
-                // Redirect the user to a protected route or dashboard
-                // For example:
-                // history.push('/dashboard');
-            } else {
-                // Handle sign-up error
-                console.error('Sign-up error:', data.error);
-            }
-        } catch (error) {
-            console.error('Sign-up error:', error);
-        }
+        const data = new FormData(event.currentTarget);
     };
 
+    const handleClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+        setOpen(false);
+    };
+
+    function TransitionLeft(props) {
+        return <Slide {...props} direction="left" />;
+    }
+
     return (
-        <ThemeProvider theme={defaultTheme}>
-            <CssBaseline />
-            <div style={{ backgroundImage: "url('https://img.freepik.com/free-photo/vertical-shot-tree-with-dark-cloud_181624-3109.jpg?t=st=1711452818~exp=1711456418~hmac=8fdb6fbeb8d9309661a653c9c18f3f1820278b1c5b9f8a4182dce26c510c393e&w=360')", backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
-                <Container
-                    component="main"
-                    maxWidth="xs"
-                >
-                    <Box
-                        sx={{
-                            marginTop: 4,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                            <LockOutlinedIcon />
-                        </Avatar>
-                        <Typography component="h1" variant="h5" style={{ color: '#fff' }}>
-                            Register Yourself
-                        </Typography>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12}  >
-                                    <TextField
-                                        autoComplete="given-name"
-                                        name="firstName"
-                                        // required
-                                        fullWidth
-                                        size="small"
-                                        id="firstName"
-                                        label={<span>First Name<span style={{ color: 'red' }}>*</span></span>}
-                                        autoFocus
-                                        value={formData.firstName}
-                                        onChange={handleChange}
-                                        InputProps={{
-                                            className: 'white-input',
-                                            style: { color: '#fff' }
-                                        }}
-                                        InputLabelProps={{
-                                            className: 'white-label',
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}  >
-                                    <TextField
-                                        // required
-                                        fullWidth
-                                        size="small"
-                                        id="lastName"
-                                        label={<span>Last Name<span style={{ color: 'red' }}>*</span></span>}
-                                        name="lastName"
-                                        autoComplete="family-name"
-                                        value={formData.lastName}
-                                        onChange={handleChange}
-                                        InputProps={{
-                                            className: 'white-input',
-                                            style: { color: '#fff' }
-                                        }}
-                                        InputLabelProps={{
-                                            className: 'white-label',
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        // required
-                                        fullWidth
-                                        size="small"
-                                        id="email"
-                                        label={<span>Email Address<span style={{ color: 'red' }}>*</span></span>}
-                                        name="email"
-                                        autoComplete="email"
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                        InputProps={{
-                                            className: 'white-input',
-                                            style: { color: '#fff' }
-                                        }}
-                                        InputLabelProps={{
-                                            className: 'white-label',
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        // required
-                                        fullWidth
-                                        size="small"
-                                        name="password"
-                                        label={<span>Password<span style={{ color: 'red' }}>*</span></span>}
-                                        type="password"
-                                        id="password"
-                                        autoComplete="new-password"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        InputProps={{
-                                            className: 'white-input',
-                                            style: { color: '#fff' }
-                                        }}
-                                        InputLabelProps={{
-                                            className: 'white-label',
-                                        }}
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Button
-                                type="submit"
-                                fullWidth
-                                size='small'
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
+        <>
+            <Snackbar
+                open={open}
+                autoHideDuration={3000}
+                onClose={handleClose}
+                TransitionComponent={TransitionLeft}
+                anchorOrigin={{ vertical, horizontal }}
+            >
+                <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+                    Failed! Enter correct username and password.
+                </Alert>
+            </Snackbar>
+            <div
+                style={{
+                    backgroundImage: `url(${bgimg})`,
+                    backgroundSize: "cover",
+                    height: "100vh",
+                    color: "#f5f5f5",
+                }}
+            >
+                <Box sx={boxstyle}>
+                    <Grid container>
+                        <Grid item xs={12} sm={12} lg={6}>
+                            <Box
+                                style={{
+                                    backgroundImage: `url(${bg})`,
+                                    backgroundSize: "cover",
+                                    marginTop: "40px",
+                                    marginLeft: "15px",
+                                    marginRight: "15px",
+                                    height: "63vh",
+                                    color: "#f5f5f5",
+                                }}
+                            ></Box>
+                        </Grid>
+                        <Grid item xs={12} sm={12} lg={6}>
+                            <Box
+                                style={{
+                                    backgroundSize: "cover",
+                                    height: "70vh",
+                                    minHeight: "500px",
+                                    backgroundColor: "#3b33d5",
+                                }}
                             >
-                                Sign Up
-                            </Button>
-                            <Grid container justifyContent="flex-end">
-                                <Grid item>
-                                    <Link href="/" variant="body2" style={{ color: '#fff' }}>
-                                        Already have an account? Sign in
-                                    </Link>
-                                </Grid>
-                            </Grid>
-                        </Box>
-                    </Box>
-                </Container>
+                                <ThemeProvider theme={darkTheme}>
+                                    <Container>
+                                        <Box height={35} />
+                                        <Box sx={center}>
+                                            <Avatar
+                                                sx={{ ml: "85px", mb: "4px", bgcolor: "#ffffff" }}
+                                            >
+                                                <LockOutlinedIcon />
+                                            </Avatar>
+                                            <Typography component="h1" variant="h4">
+                                                Create Account
+                                            </Typography>
+                                        </Box>
+                                        <Box
+                                            component="form"
+                                            noValidate
+                                            onSubmit={handleSubmit}
+                                            sx={{ mt: 2 }}
+                                        >
+                                            <Grid container spacing={1}>
+                                                <Grid item xs={12} sx={{ ml: "3em", mr: "3em" }}>
+                                                    <TextField
+                                                        required
+                                                        fullWidth
+                                                        id="email"
+                                                        label="Username"
+                                                        name="email"
+                                                        autoComplete="email"
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12} sx={{ ml: "3em", mr: "3em" }}>
+                                                    <TextField
+                                                        required
+                                                        fullWidth
+                                                        name="password"
+                                                        label="Password"
+                                                        type="password"
+                                                        id="password"
+                                                        autoComplete="new-password"
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12} sx={{ ml: "3em", mr: "3em" }}>
+                                                    <TextField
+                                                        required
+                                                        fullWidth
+                                                        name="confirmpassword"
+                                                        label="Confirm Password"
+                                                        type="password"
+                                                        id="confirmpassword"
+                                                        autoComplete="new-password"
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={12} sx={{ ml: "5em", mr: "5em" }}>
+                                                    <Button
+                                                        type="submit"
+                                                        variant="contained"
+                                                        fullWidth="true"
+                                                        size="large"
+                                                        sx={{
+                                                            mt: "15px",
+                                                            mr: "20px",
+                                                            borderRadius: 28,
+                                                            color: "#ffffff",
+                                                            minWidth: "170px",
+                                                            backgroundColor: "#FF9A01",
+                                                        }}
+                                                    >
+                                                        Register
+                                                    </Button>
+                                                </Grid>
+                                                <Grid item xs={12} sx={{ ml: "3em", mr: "3em" }}>
+                                                    <Stack direction="row" spacing={2}>
+                                                        <Typography
+                                                            variant="body1"
+                                                            component="span"
+                                                            style={{ marginTop: "10px" }}
+                                                        >
+                                                            Already have an Account?{" "}
+                                                            <span
+                                                                style={{ color: "#beb4fb", cursor: "pointer" }}
+                                                                onClick={() => {
+                                                                    navigate("/");
+                                                                }}
+                                                            >
+                                                                Sign In
+                                                            </span>
+                                                        </Typography>
+                                                    </Stack>
+                                                </Grid>
+                                            </Grid>
+                                        </Box>
+                                    </Container>
+                                </ThemeProvider>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </Box>
             </div>
-        </ThemeProvider>
+        </>
     );
 }

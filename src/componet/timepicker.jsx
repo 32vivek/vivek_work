@@ -17,7 +17,7 @@ export default function TimePickerViewRenderers({ formValues, label, handleInput
                 <TextField
                     label={label}
                     type="time"
-                    size="small"
+                    // size="small"
                     error={!!error}
                     value={selectedTime}
                     onChange={(e) => {

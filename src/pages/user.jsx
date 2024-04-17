@@ -16,6 +16,8 @@ import { experimentalStyled as styled } from '@mui/material/styles';
 import TextArea from '../componet/textarea';
 import RadioButton from '../componet/radiobutton';
 import Buttton from '../componet/button';
+import { country_API } from '../API/Api';
+import { state_API } from '../API/Api';
 
 const User = () => {
     const [data, setData] = useState([]);
@@ -81,7 +83,7 @@ const User = () => {
 
     const fetchCountryData = async () => {
         try {
-            const response = await axios.get('http://192.168.1.2:8083/country/drop-down-list');
+            const response = await axios.get(`${country_API}`);
             setData(response.data.data);
             const india = response.data.data.find(country => country.id === 101);
             if (india) {
@@ -103,7 +105,7 @@ const User = () => {
     const fetchStateData = async (countryId) => {
         try {
             if (countryId) {
-                const response = await axios.get(`http://192.168.1.2:8083/state/drop-down-list/country/${countryId}`);
+                const response = await axios.get(`${state_API}/${countryId}`);
                 setStateData(response.data.data);
             }
         } catch (error) {
@@ -387,7 +389,9 @@ const User = () => {
                         USER FORM
                     </Typography>
                 </Grid>
+
                 <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+
                     {/* <Paper elevation={2}> */}
                     <Box
                         component="form"

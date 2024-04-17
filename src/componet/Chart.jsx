@@ -5,7 +5,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import { LineChart } from '@mui/x-charts/LineChart';
-
+import axios from 'axios'; // Import Axios
 const Charts = () => {
     const [profit, setProfit] = useState(0);
     const targetProfit = 4562;
@@ -25,6 +25,9 @@ const Charts = () => {
 
         return () => clearInterval(timer);
     }, []);
+
+
+
 
     const card = (
         <React.Fragment>

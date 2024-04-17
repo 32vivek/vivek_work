@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -21,13 +21,28 @@ import MailIcon from '@mui/icons-material/Mail';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import WorkIcon from '@mui/icons-material/Work';
-import PublicIcon from '@mui/icons-material/Public'; // Import globe icon
+import PublicIcon from '@mui/icons-material/Public';
 import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
+import DraggableDialog from '../Dialog';
+import Avatar from '@mui/material/Avatar';
+import { API_Auth } from '../../API/Api';
 const drawerWidth = 200;
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 800,
+    bgcolor: 'background.paper',
+    // border: '2px solid #000',
+    boxShadow: 54,
+    p: 4,
+};
 
 const openedMixin = (theme) => ({
     width: drawerWidth,
@@ -94,18 +109,48 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-const SideBar = ({ loggedInUser }) => {
+const SideBar = () => {
+    const [open, setOpen] = React.useState(false);
+    const handleDrawerOpen = () => setOpen(true);
+    const handleDrawerClose = () => setOpen(false);
+    const navigate = useNavigate();
+    const [userDetails, setUserDetails] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                const response = await fetch(
+                    `${API_Auth}/user/detail`,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Authorization": `Bearer ${localStorage.getItem('token')}`,
+                        },
+                    }
+                );
+
+                if (response.ok) {
+                    const userData = await response.json();
+                    setUserDetails(userData);
+                } else {
+                    throw new Error("Failed to fetch user details");
+                }
+            } catch (error) {
+                console.error("Error fetching user details:", error);
+            }
+        };
+
+        fetchUserDetails();
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate('/');
+    }
+
     const theme = useTheme();
-    const [open, setOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
-
-    const handleDrawerOpen = () => {
-        setOpen(true);
-    };
-
-    const handleDrawerClose = () => {
-        setOpen(false);
-    };
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -115,25 +160,36 @@ const SideBar = ({ loggedInUser }) => {
         setAnchorEl(null);
     };
 
+
+
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
     return (
-        <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
-            <AppBar position="fixed" open={open}>
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{
-                            marginRight: 5,
-                            ...(open && { display: 'none' }),
-                        }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, textAlign: 'right', pr: 2 }}>
-                        <div>
+        <>
+            <Box sx={{ display: 'flex' }}>
+                <CssBaseline />
+                <AppBar position="fixed" open={open}>
+                    <Toolbar>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            edge="start"
+                            sx={{
+                                marginRight: 5,
+                                ...(open && { display: 'none' }),
+                            }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, textAlign: 'right', pr: 2 }}>
+
                             <Button
                                 id="basic-button"
                                 aria-controls={open ? 'basic-menu' : undefined}
@@ -143,8 +199,10 @@ const SideBar = ({ loggedInUser }) => {
                                 style={{ color: "gray", backgroundColor: "white", fontWeight: 'bold' }}
                             >
                                 <AccountCircleIcon sx={{ marginRight: 1 }} />
-                                {loggedInUser ? loggedInUser : 'User'}
+
+                                {userDetails ? userDetails.fullName : 'User'}
                             </Button>
+
 
                             <Popover
                                 id="basic-menu"
@@ -160,82 +218,84 @@ const SideBar = ({ loggedInUser }) => {
                                     horizontal: 'right',
                                 }}
                             >
-                                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                                <MenuItem onClick={handleClose}>My account</MenuItem>
-                                <MenuItem onClick={handleClose}>Logout</MenuItem>
+                                <MenuItem onClick={handleOpenModal}>My Details</MenuItem>
+                                <MenuItem onClick={handleLogout}>Logout</MenuItem>
                             </Popover>
-                        </div>
-                    </Typography>
-                </Toolbar>
-            </AppBar>
-            <Drawer variant="permanent" open={open}>
-                <DrawerHeader>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                    </IconButton>
-                </DrawerHeader>
-                <Divider />
-                <List>
-                    {['Home', 'Register', 'Work Details', 'Country', 'User'].map((text, index) => ( // Changed 'Team' to 'Country'
-                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                component={Link}
-                                to={index === 0 ? '/analytics' : (index === 2 ? '/workdetails' : (index === 3 ? '/table' : (index === 4 ? '/user' : '/contact')))}
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'flex-end',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
+
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
+                <Drawer variant="permanent" open={open}>
+                    <DrawerHeader>
+                        <IconButton onClick={handleDrawerClose}>
+                            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                        </IconButton>
+                    </DrawerHeader>
+                    <Divider />
+                    <List>
+                        {['Home', 'Register', 'Work Details', 'Country', 'User'].map((text, index) => (
+                            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                                <ListItemButton
+                                    component={Link}
+                                    to={index === 0 ? '/analytics' : (index === 2 ? '/workdetails' : (index === 3 ? '/table' : (index === 4 ? '/user' : '/contact')))}
                                     sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
+                                        minHeight: 48,
+                                        justifyContent: open ? 'initial' : 'flex-end',
+                                        px: 2.5,
                                     }}
                                 >
-                                    {text === 'Home' && <HomeIcon />}
-                                    {text === 'Register' && <AccountCircleIcon />}
-                                    {text === 'Work Details' && <WorkIcon />}
-                                    {text === 'Country' && <PublicIcon />} {/* Replaced with globe icon */}
-                                    {text === 'User' && <AccountCircleIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
-                <Divider />
-                <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'flex-end',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
+                                    <ListItemIcon
+                                        sx={{
+                                            minWidth: 0,
+                                            mr: open ? 3 : 'auto',
+                                            justifyContent: 'center',
+                                        }}
+                                    >
+                                        {text === 'Home' && <HomeIcon />}
+                                        {text === 'Register' && <AccountCircleIcon />}
+                                        {text === 'Work Details' && <WorkIcon />}
+                                        {text === 'Country' && <PublicIcon />}
+                                        {text === 'User' && <AccountCircleIcon />}
+                                    </ListItemIcon>
+                                    <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                                </ListItemButton>
+                            </ListItem>
+                        ))}
+                    </List>
+                    <Divider />
+                    <List>
+                        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                                <ListItemButton
                                     sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
+                                        minHeight: 48,
+                                        justifyContent: open ? 'initial' : 'flex-end',
+                                        px: 2.5,
                                     }}
                                 >
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
-            </Drawer>
-            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                <DrawerHeader />
+                                    <ListItemIcon
+                                        sx={{
+                                            minWidth: 0,
+                                            mr: open ? 3 : 'auto',
+                                            justifyContent: 'center',
+                                        }}
+                                    >
+                                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                                    </ListItemIcon>
+                                    <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                                </ListItemButton>
+                            </ListItem>
+                        ))}
+                    </List>
+                </Drawer>
+                <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+                    <DrawerHeader />
+                </Box>
+
             </Box>
 
-        </Box>
+            <DraggableDialog open={isModalOpen} handleClose={handleCloseModal} userDetails={userDetails} />
+        </>
     );
 }
 

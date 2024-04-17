@@ -25,7 +25,7 @@ const Autocmp = ({ data, label, placeholder, onChange, defaultValue, multiple, h
                 limitTags={1}
                 id="multiple-limit-tags"
                 options={data}
-                size="small"
+                // size="small"
                 style={style}
                 getOptionLabel={(option) => option.name}
                 onChange={handleSelectionChange}

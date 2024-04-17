@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import 'react-toastify/dist/ReactToastify.css';
 import SideBar from './sidebar/sidebar';
 import './contactm.css';
+import { contactForm_API } from '../API/Api';
 
 const CustomCircularProgress = ({ delay }) => {
     const [showLoader, setShowLoader] = useState(true);
@@ -65,7 +66,7 @@ const ContactForm = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('https://65a4e05752f07a8b4a3dd9b7.mockapi.io/user');
+            const response = await axios.get(`${contactForm_API}`);
             setData(response.data);
             setFilteredData(response.data);
         } catch (error) {
@@ -78,21 +79,22 @@ const ContactForm = () => {
     const handleSearch = (text) => {
         setSearchText(text);
         const filtered = data.filter(item =>
-            item.name.toLowerCase().includes(text.toLowerCase()) ||
-            item.email.toLowerCase().includes(text.toLowerCase()) ||
-            item.mobile.includes(text) ||
-            item.department.toLowerCase().includes(text.toLowerCase())
+            (item.name && item.name.toLowerCase().includes(text.toLowerCase())) ||
+            (item.email && item.email.toLowerCase().includes(text.toLowerCase())) ||
+            (typeof item.mobile === 'string' && item.mobile.includes(text)) || // Check if mobile is a string
+            (item.department && item.department.toLowerCase().includes(text.toLowerCase()))
         );
         setFilteredData(filtered);
     };
 
+
     const onSubmit = async (data) => {
         try {
             if (editingUser) {
-                await axios.put(`https://65a4e05752f07a8b4a3dd9b7.mockapi.io/user/${editingUser.id}`, data);
+                await axios.put(`${contactForm_API}/${editingUser.id}`, data);
                 toast.success('User updated successfully!');
             } else {
-                await axios.post('https://65a4e05752f07a8b4a3dd9b7.mockapi.io/user', data);
+                await axios.post(`${contactForm_API}`, data);
                 toast.success('User registered successfully!');
             }
             reset();
@@ -131,7 +133,7 @@ const ContactForm = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await axios.delete(`https://65a4e05752f07a8b4a3dd9b7.mockapi.io/user/${id}`);
+                    await axios.delete(`${contactForm_API}/${id}`);
                     toast.success('User deleted successfully!');
                     fetchData();
                 } catch (error) {

@@ -15,13 +15,13 @@ function Dropdown({ placeholder, options, name, handleInputChange, formValues, e
 
     const handleChange = (event) => {
         const selectedValue = event.target.value;
-        console.log("Selected Value before update:", selectedValue);
+        // console.log("Selected Value before update:", selectedValue);
         setSelectedValue(selectedValue);
         handleInputChange({ target: { name, value: selectedValue } });
-        console.log("Selected Value after update:", selectedValue);
+        // console.log("Selected Value after update:", selectedValue);
     };
 
-    console.log("Render: Selected Value:", selectedValue);
+    // console.log("Render: Selected Value:", selectedValue);
 
 
     return (
@@ -32,7 +32,8 @@ function Dropdown({ placeholder, options, name, handleInputChange, formValues, e
                     onChange={handleChange}
                     label={label}
                     displayEmpty
-                    size="small"
+                // size="small"
+
                 >
                     <MenuItem value="" disabled>
                         {placeholder} <span style={{ color: 'red' }}>*</span>

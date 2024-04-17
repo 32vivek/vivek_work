@@ -3,7 +3,7 @@ import Dropdown from "../componet/dropdown";
 import Grid from "@mui/material/Grid";
 import TimePickerViewRenderers from "../componet/timepicker";
 import Stack from "@mui/material/Stack";
-import Autocmp from "./../componet/autocom";
+
 import Typography from "@mui/material/Typography";
 import { FormControl } from '@mui/material';
 import { useDispatch } from 'react-redux';
@@ -136,7 +136,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
     };
 
     useEffect(() => {
-        console.log("Editing user:", editingUser);
+        // console.log("Editing user:", editingUser);
         if (editingUser) {
             updateFormVisibility(editingUser.workingType);
             setFormValues(editingUser);
@@ -232,7 +232,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                 });
         }
     };
-    console.log("Form Values:", formValues);
+    // console.log("Form Values:", formValues);
 
     const handleClearForm = () => {
         setFormValues(initialFormValues);
@@ -279,12 +279,12 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
 
                         <FormControl fullWidth error={error && formValues.workingType === ""}>
 
-
                             <Dropdown
                                 // label="Working Type"
                                 formValues={formValues.workingType}
                                 placeholder="Select Working Type"
                                 name="workingType"
+
                                 options={workingTypeOptions}
                                 handleInputChange={handleInputChange}
                                 selectedValue={formValues.workingType}
@@ -295,7 +295,6 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                                 </Typography>
                             )}
                         </FormControl>
-
                     </Grid>
                     <Grid item lg={4} xs={6} md={6}>
                         <FormControl fullWidth error={error && formValues.orgId === ""}>
@@ -306,6 +305,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                                 formValues={formValues}
                                 value={selectedOrgId}
                                 name="orgId"
+
                                 handleInputChange={handleInputChange}
                             />
                             {error && formValues.orgId === "" && (
@@ -322,6 +322,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                                 formValues={formValues}
                                 options={department}
                                 name="departmentName"
+
                                 handleInputChange={handleInputChange}
                                 value={formValues.departmentName}
                             />
@@ -339,6 +340,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                                 options={holidayOptions}
                                 formValues={formValues}
                                 name="holiday"
+
                                 handleInputChange={handleInputChange}
                                 value={formValues.holiday}
                             />
@@ -355,7 +357,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                                 id="outlined-required"
                                 required
                                 label="Module Name"
-                                size="small"
+                                // size="small"
                                 variant="outlined"
                                 placeholder="Module Name"
                                 name="moduleName"
@@ -373,7 +375,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                             <Autocomplete
                                 multiple
                                 options={data}
-                                size="small"
+                                // size="small"
                                 limitTags={1}
                                 getOptionLabel={(option) => option?.name || ''}
                                 renderInput={(params) => <TextField {...params} label="Select Days" />}
@@ -399,6 +401,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                                 placeholder="From Day"
                                 options={data}
                                 formValues={formValues}
+
                                 name="fromDay"
                                 handleInputChange={handleInputChange}
                                 value={formValues.fromDay}
@@ -410,6 +413,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                             <Dropdown
                                 placeholder="To Day"
                                 options={data}
+
                                 formValues={formValues}
                                 name="toDay"
                                 handleInputChange={handleInputChange}
@@ -435,6 +439,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                             <TimePickerViewRenderers
                                 label="From Time"
                                 name="fromTime"
+
                                 formValues={formValues}
                                 handleInputChange={handleInputChange}
                                 value={formValues.fromTime}
@@ -448,6 +453,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                             <TimePickerViewRenderers
                                 label="To Time"
                                 name="toTime"
+
                                 formValues={formValues}
                                 handleInputChange={handleInputChange}
                                 value={formValues.toTime}
@@ -459,6 +465,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                             <TimePickerViewRenderers
                                 label="Working Hours"
                                 name="workingHrs"
+
                                 formValues={formValues}
                                 handleInputChange={handleInputChange}
                                 value={formValues.workingHrs}
@@ -471,16 +478,16 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                 <Stack mt="20px" display="flex" flexDirection="row" justifyContent="center" alignItems="center">
 
 
-                    <Button onClick={handleSubmit} variant="contained" color="success" size="small">
+                    <Button onClick={handleSubmit} variant="contained" color="success"  >
                         {editingUser ? 'Update' : 'Register'}
                     </Button>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <Button variant="contained" size="small" onClick={handleClose} style={{ backgroundColor: "#D3D3D3", color: 'black' }}>
+                    <Button variant="contained" onClick={handleClose} style={{ backgroundColor: "#D3D3D3", color: 'black' }}>
                         Close
                     </Button>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <Button variant="contained" size="small" onClick={handleClearForm} style={{ backgroundColor: "#D3D3D3", color: 'black' }}>
-                        Reset Form
+                    <Button variant="contained" onClick={handleClearForm} style={{ backgroundColor: "red", color: 'white' }}>
+                        Clear Form
                     </Button>
 
                 </Stack>

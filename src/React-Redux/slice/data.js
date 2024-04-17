@@ -1,29 +1,29 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
+import { reactDataTable_API } from "../../API/Api";
 
-const API = "https://65a4e05752f07a8b4a3dd9b7.mockapi.io/auth";
 
 //Fetch Item
 export const fetchTodos = createAsyncThunk("fetchTodos", async () => {
-    const response = await fetch(API);
+    const response = await fetch(`${reactDataTable_API}`);
     return response.json();
 });
 
 //Post Item
 export const submitFormData = createAsyncThunk("submitFormData", async (formData) => {
-    const response = await axios.post(API, formData);
+    const response = await axios.post(`${reactDataTable_API}`, formData);
     return response.data;
 });
 
 // Delete Item
 export const deleteItem = createAsyncThunk("deleteItem", async (itemId) => {
-    await axios.delete(`${API}/${itemId}`);
+    await axios.delete(`${reactDataTable_API}/${itemId}`);
     return itemId;
 });
 
 // Update Item
 export const updateItem = createAsyncThunk("updateItem", async ({ itemId, formData }) => {
-    const response = await axios.put(`${API}/${itemId}`, formData);
+    const response = await axios.put(`${reactDataTable_API}/${itemId}`, formData);
     return response.data;
 });
 

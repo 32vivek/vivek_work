@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Dropdown from "../componet/dropdown";
+// import Dropdown from "../componet/dropdown";
 import Grid from "@mui/material/Grid";
-import TimePickerViewRenderers from "../componet/timepicker";
+// import TimePickerViewRenderers from "../componet/timepicker";
 import Stack from "@mui/material/Stack";
 import axios from "axios";
 import Buttton from "./../componet/button";
@@ -246,7 +246,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
     return (
         <>
             <ToastContainer autoClose={7000} />
-            <form onSubmit={handleSubmit}>
+            {/* <form onSubmit={handleSubmit}>
                 <Typography
                     id="transition-modal-title"
                     variant="h4"
@@ -338,7 +338,7 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                                 size="small"
                                 variant="outlined"
                                 placeholder="Module Name"
-                                // focused
+                               
                                 name="moduleName"
                                 value={formValues.moduleName}
                                 onChange={handleInputChange}
@@ -411,13 +411,13 @@ const WorkDetails = ({ onSubmit, handleClose }) => {
                     </Grid>
 
                 </Grid>
-                {/* <Grid item xs={6}> */}
+              
                 <Stack display="flex" justifyContent="center" alignItems="center" mt="20px">
                     <Buttton onClick={handleSubmit} name="Save Data"
                     />
                 </Stack>
-                {/* </Grid> */}
-            </form>
+               
+            </form> */}
         </>
     );
 };
