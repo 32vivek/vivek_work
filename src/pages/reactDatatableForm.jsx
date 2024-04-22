@@ -3,7 +3,6 @@ import Dropdown from "../componet/dropdown";
 import Grid from "@mui/material/Grid";
 import TimePickerViewRenderers from "../componet/timepicker";
 import Stack from "@mui/material/Stack";
-
 import Typography from "@mui/material/Typography";
 import { FormControl } from '@mui/material';
 import { useDispatch } from 'react-redux';
@@ -284,7 +283,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                                 formValues={formValues.workingType}
                                 placeholder="Select Working Type"
                                 name="workingType"
-
+                                size="small"
                                 options={workingTypeOptions}
                                 handleInputChange={handleInputChange}
                                 selectedValue={formValues.workingType}
@@ -305,7 +304,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                                 formValues={formValues}
                                 value={selectedOrgId}
                                 name="orgId"
-
+                                size="small"
                                 handleInputChange={handleInputChange}
                             />
                             {error && formValues.orgId === "" && (
@@ -322,7 +321,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                                 formValues={formValues}
                                 options={department}
                                 name="departmentName"
-
+                                size="small"
                                 handleInputChange={handleInputChange}
                                 value={formValues.departmentName}
                             />
@@ -340,7 +339,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                                 options={holidayOptions}
                                 formValues={formValues}
                                 name="holiday"
-
+                                size="small"
                                 handleInputChange={handleInputChange}
                                 value={formValues.holiday}
                             />
@@ -357,7 +356,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                                 id="outlined-required"
                                 required
                                 label="Module Name"
-                                // size="small"
+                                size="small"
                                 variant="outlined"
                                 placeholder="Module Name"
                                 name="moduleName"
@@ -375,7 +374,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                             <Autocomplete
                                 multiple
                                 options={data}
-                                // size="small"
+                                size="small"
                                 limitTags={1}
                                 getOptionLabel={(option) => option?.name || ''}
                                 renderInput={(params) => <TextField {...params} label="Select Days" />}
@@ -401,7 +400,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                                 placeholder="From Day"
                                 options={data}
                                 formValues={formValues}
-
+                                size="small"
                                 name="fromDay"
                                 handleInputChange={handleInputChange}
                                 value={formValues.fromDay}
@@ -413,7 +412,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                             <Dropdown
                                 placeholder="To Day"
                                 options={data}
-
+                                size="small"
                                 formValues={formValues}
                                 name="toDay"
                                 handleInputChange={handleInputChange}
@@ -427,6 +426,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                             <TimePickerViewRenderers
                                 label="Non-Working Hours"
                                 name="nonWorkingHrs"
+                                size="small"
                                 formValues={formValues}
                                 handleInputChange={handleInputChange}
                                 value={formValues.nonWorkingHrs}
@@ -439,7 +439,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                             <TimePickerViewRenderers
                                 label="From Time"
                                 name="fromTime"
-
+                                size="small"
                                 formValues={formValues}
                                 handleInputChange={handleInputChange}
                                 value={formValues.fromTime}
@@ -453,7 +453,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                             <TimePickerViewRenderers
                                 label="To Time"
                                 name="toTime"
-
+                                size="small"
                                 formValues={formValues}
                                 handleInputChange={handleInputChange}
                                 value={formValues.toTime}
@@ -465,7 +465,7 @@ const ReactDatatableForm = ({ handleClose, updateTableData, editingUser, handleE
                             <TimePickerViewRenderers
                                 label="Working Hours"
                                 name="workingHrs"
-
+                                size="small"
                                 formValues={formValues}
                                 handleInputChange={handleInputChange}
                                 value={formValues.workingHrs}

@@ -27,9 +27,8 @@ import Popover from '@mui/material/Popover';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import DraggableDialog from '../Dialog';
-import Avatar from '@mui/material/Avatar';
 import { API_Auth } from '../../API/Api';
+import UserDetails from '../muigrid';
 const drawerWidth = 200;
 
 const style = {
@@ -39,7 +38,6 @@ const style = {
     transform: 'translate(-50%, -50%)',
     width: 800,
     bgcolor: 'background.paper',
-    // border: '2px solid #000',
     boxShadow: 54,
     p: 4,
 };
@@ -70,8 +68,8 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: theme.spacing(0, 1),
-
     ...theme.mixins.toolbar,
+
 }));
 
 const AppBar = styled(MuiAppBar, {
@@ -113,34 +111,36 @@ const SideBar = () => {
     const [open, setOpen] = React.useState(false);
     const handleDrawerOpen = () => setOpen(true);
     const handleDrawerClose = () => setOpen(false);
-    const navigate = useNavigate();
-    const [userDetails, setUserDetails] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    useEffect(() => {
-        const fetchUserDetails = async () => {
-            try {
-                const response = await fetch(
-                    `${API_Auth}/user/detail`,
-                    {
-                        method: "GET",
-                        headers: {
-                            "Authorization": `Bearer ${localStorage.getItem('token')}`,
-                        },
-                    }
-                );
+    const navigate = useNavigate();
+    const [userDetail, setUserDetails] = useState(null);
+    // const [isModalOpen, setIsModalOpen] = useState(false);
 
-                if (response.ok) {
-                    const userData = await response.json();
-                    setUserDetails(userData);
-                } else {
-                    throw new Error("Failed to fetch user details");
+    const fetchUserDetails = async () => {
+        try {
+            const response = await fetch(
+                `${API_Auth}/user/detail`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem('token')}`,
+                    },
                 }
-            } catch (error) {
-                console.error("Error fetching user details:", error);
-            }
-        };
+            );
 
+            if (response.ok) {
+                const userData = await response.json();
+                setUserDetails(userData);
+            } else {
+                throw new Error("Failed to fetch user details");
+            }
+        } catch (error) {
+            console.error("Error fetching user details:", error);
+        }
+    };
+
+    useEffect(() => {
         fetchUserDetails();
     }, []);
 
@@ -159,8 +159,6 @@ const SideBar = () => {
     const handleClose = () => {
         setAnchorEl(null);
     };
-
-
 
     const handleOpenModal = () => {
         setIsModalOpen(true);
@@ -200,7 +198,8 @@ const SideBar = () => {
                             >
                                 <AccountCircleIcon sx={{ marginRight: 1 }} />
 
-                                {userDetails ? userDetails.fullName : 'User'}
+                                {userDetail ? userDetail.fullName : 'User'}
+
                             </Button>
 
 
@@ -218,7 +217,12 @@ const SideBar = () => {
                                     horizontal: 'right',
                                 }}
                             >
-                                <MenuItem onClick={handleOpenModal}>My Details</MenuItem>
+                                <MenuItem component={Link} to="/workdetails" onClick={() => {
+                                    // fetchUserDetails();
+                                    handleClose();
+                                }}>
+                                    My Details
+                                </MenuItem>
                                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
                             </Popover>
 
@@ -237,7 +241,7 @@ const SideBar = () => {
                             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                                 <ListItemButton
                                     component={Link}
-                                    to={index === 0 ? '/analytics' : (index === 2 ? '/workdetails' : (index === 3 ? '/table' : (index === 4 ? '/user' : '/contact')))}
+                                    to={index === 0 ? '/analytics' : (index === 2 ? '/work' : (index === 3 ? '/table' : (index === 4 ? '/user' : '/contact')))}
                                     sx={{
                                         minHeight: 48,
                                         justifyContent: open ? 'initial' : 'flex-end',
@@ -294,7 +298,6 @@ const SideBar = () => {
 
             </Box>
 
-            <DraggableDialog open={isModalOpen} handleClose={handleCloseModal} userDetails={userDetails} />
         </>
     );
 }

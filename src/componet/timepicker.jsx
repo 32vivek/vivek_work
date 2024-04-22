@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import { TextField, FormControl, FormHelperText } from '@mui/material';
 
-export default function TimePickerViewRenderers({ formValues, label, handleInputChange, name, error }) {
+export default function TimePickerViewRenderers({ formValues, label, handleInputChange, name, error, size }) {
 
     const [selectedTime, setSelectedTime] = useState(formValues[name]);
 
@@ -17,7 +17,7 @@ export default function TimePickerViewRenderers({ formValues, label, handleInput
                 <TextField
                     label={label}
                     type="time"
-                    // size="small"
+                    size={size}
                     error={!!error}
                     value={selectedTime}
                     onChange={(e) => {

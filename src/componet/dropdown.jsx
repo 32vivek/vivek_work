@@ -4,7 +4,7 @@ import Select from '@mui/material/Select';
 import { FormControl } from '@mui/material';
 import { FormHelperText } from '@mui/material';
 
-function Dropdown({ placeholder, options, name, handleInputChange, formValues, error, label }) {
+function Dropdown({ placeholder, options, name, handleInputChange, formValues, error, label, size }) {
     const [selectedValue, setSelectedValue] = useState('');
 
     useEffect(() => {
@@ -32,8 +32,8 @@ function Dropdown({ placeholder, options, name, handleInputChange, formValues, e
                     onChange={handleChange}
                     label={label}
                     displayEmpty
+                    size={size}
                 // size="small"
-
                 >
                     <MenuItem value="" disabled>
                         {placeholder} <span style={{ color: 'red' }}>*</span>

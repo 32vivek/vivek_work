@@ -14,6 +14,8 @@ import WorkingHours from './pages/workingHours';
 import Reactdatatablepage from "./pages/reactdatatablepage"
 import PrivateRoutes from './componet/Protected';
 import setAuthToken from './componet/Auth';
+// import userDetails from './pages/userDetails'; 
+import RefreshAccessToken from './componet/refreshToken';
 function App() {
 
   useEffect(() => {
@@ -24,14 +26,19 @@ function App() {
       setAuthToken(token);
     }
   }, []);
+
+
   return (
     <BrowserRouter>
       <div className="App">
-        <Routes>
 
+        <RefreshAccessToken />
+        <Routes>
           <Route element={<PrivateRoutes />}>
             <Route path='/home' element={<Charts />} />
             <Route path='/contact' element={<Contactm />} />
+            <Route path='/userdetailsauth' element={<userDetails />} />
+
             {/* <Route path='/dummy1' element={<Dummy1 />} />
           <Route path='/dummy2' element={<Dummy2 />} /> */}
             {/* <Route path='/' element={<Login />} /> */}
