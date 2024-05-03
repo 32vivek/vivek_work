@@ -1,0 +1,16 @@
+.sorting-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.TableCell:hover .sorting-arrow {
+    opacity: 1;
+}
+ 
+.sorting-arrow {
+    color: red !important;
+}
