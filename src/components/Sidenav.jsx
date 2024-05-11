@@ -15,6 +15,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import PublicIcon from "@mui/icons-material/Public";
 import PersonIcon from "@mui/icons-material/Person";
 import PeopleIcon from '@mui/icons-material/People';
+import DynamicFormIcon from '@mui/icons-material/DynamicForm';
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -210,6 +211,34 @@ export default function Sidenav() {
               <PeopleIcon />
             </ListItemIcon>
             <ListItemText primary="User Form" sx={{ opacity: open ? 1 : 0 }} />
+          </ListItemButton>
+        </ListItem>
+        <ListItem
+          disablePadding
+          sx={{ display: "block" }}
+          onClick={() => {
+            navigate("/dynamicfield");
+          }}
+        >
+          <ListItemButton
+            sx={{
+              minHeight: 48,
+              justifyContent: open ? "initial" : "center",
+              px: 2.5,
+            }}
+          >
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: open ? 3 : "auto",
+                justifyContent: "center",
+              }}
+            >
+
+              {/* <PersonIcon /> */}
+              <DynamicFormIcon />
+            </ListItemIcon>
+            <ListItemText primary="Dynamic Form" sx={{ opacity: open ? 1 : 0 }} />
           </ListItemButton>
         </ListItem>
       </List>

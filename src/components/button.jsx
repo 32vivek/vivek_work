@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { FormControl } from '@mui/material';
 
-const Buttton = ({ onClick, name, style, size, color }) => {
+const Buttton = ({ onClick, name, style, size, color, label }) => {
     return (
 
         // <div style={{ marginBottom: '30px' }}>
@@ -12,6 +12,7 @@ const Buttton = ({ onClick, name, style, size, color }) => {
                 variant="contained"
                 onClick={onClick}
                 style={style}
+                label={label}
                 color={color}
                 sx={{
                     borderRadius: '15px',

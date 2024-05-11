@@ -5,7 +5,7 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 
-export default function Dropdown({ options, handleInputChange, name, formValues, label, error, defaultOption, size }) {
+export default function Dropdown({ options, handleInputChange, name, formValues = {}, label, error, defaultOption, size }) {
     const [selectedValue, setSelectedValue] = useState('');
 
     useEffect(() => {
@@ -19,6 +19,7 @@ export default function Dropdown({ options, handleInputChange, name, formValues,
 
         handleInputChange({ target: { name, value: selectedValue } });
     };
+
     // console.log(selectedValue, "value")
     return (
         <div>
@@ -50,3 +51,4 @@ export default function Dropdown({ options, handleInputChange, name, formValues,
         </div>
     );
 }
+

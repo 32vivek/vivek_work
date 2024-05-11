@@ -5,14 +5,14 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 
-const RadioButton = ({ onChange, value, error }) => {
+const RadioButton = ({ onChange, value, error, style }) => {
     const handleChange = (event) => {
         onChange(event.target.value);
     };
 
     return (
         <FormControl component="fieldset" error={!!error}>
-            <FormLabel component="legend" sx={{ color: 'black' }}>Gender</FormLabel>
+            <FormLabel component="legend" sx={style}>Gender</FormLabel>
             <RadioGroup
                 row
                 value={value}

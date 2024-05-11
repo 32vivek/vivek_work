@@ -33,6 +33,7 @@ const CheckBoxx = () => {
                 sx={{ m: 1 }}
                 variant="standard"
                 color="primary" focused
+
             >
                 <FormLabel component="legend" sx={{ textAlign: 'center' }}>Assign responsibility</FormLabel>
                 <FormGroup style={{ display: 'flex', flexDirection: 'row' }}>

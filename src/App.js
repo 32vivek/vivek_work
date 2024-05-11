@@ -9,6 +9,7 @@ import UserDetails from './pages/logindetails';
 import Login from './components/LoginPage/login';
 import PrivateRoutes from './components/Protected';
 import TokenRefresh from './components/refreshToken';
+import DynamicField from './pages/dynamicformfield';
 export default function App() {
   return (
     <>
@@ -22,6 +23,7 @@ export default function App() {
             <Route path="/workinghours" exact element={<WorkingHours />} />
             <Route path="/userform" exact element={<User />} />
             <Route path="/logindetails" exact element={<UserDetails />} />
+            <Route path="/dynamicfield" exact element={<DynamicField />} />
             {/* </Route> */}
             <Route path="/" exact element={<Login />} />
           </Routes>

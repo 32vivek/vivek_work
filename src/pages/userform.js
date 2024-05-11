@@ -711,6 +711,7 @@ const User = () => {
                                             onChange={(value) => setSelectedRadio(value)}
                                             value={selectedRadio}
                                             error={formErrors.gender}
+                                            style={{ color: 'black' }}
                                         />
                                     </FormControl>
                                     {/* </Paper> */}
