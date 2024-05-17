@@ -155,38 +155,20 @@ const User = () => {
     };
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        if (name === 'name' || name === 'lastname') {
+        setFormValues((prevFormValues) => ({
+            ...prevFormValues,
+            [name]: value,
+        }));
 
-            setFormValues((prevFormValues) => ({
-                ...prevFormValues,
-                [name]: value,
-
-                fullname: name === 'name' ? value.trim() + ' ' + (prevFormValues.lastname || '') : (prevFormValues.name || '') + ' ' + value.trim(),
-            }));
-
-            const errors = {};
-            if (!value.trim()) {
-                errors[name] = name === 'name' ? 'First Name is required' : 'Last Name is required';
-            } else if (value.length < 3 || value.length > 19) {
-                errors[name] = `${name === 'name' ? 'First Name' : 'Last Name'} must be between 3 and 19 characters`;
-            }
-            setFormErrors((prevFormErrors) => ({
-                ...prevFormErrors,
-                ...errors,
-            }));
-        } else if (name === 'address') {
-            setFormValues((prevFormValues) => ({
-                ...prevFormValues,
-                [name]: value,
-            }));
+        const errors = { ...formErrors };
+        if (!value.trim()) {
+            errors[name] = `${name.charAt(0).toUpperCase() + name.slice(1)} is required`;
         } else {
-
-            setFormValues((prevFormValues) => ({
-                ...prevFormValues,
-                [name]: value,
-            }));
+            errors[name] = '';
         }
+        setFormErrors(errors);
     };
+
 
 
 
@@ -220,19 +202,7 @@ const User = () => {
                 checkboxData: selectedCheckboxes
             }));
 
-            // console.log('Form submitted:', {
-            //     // name: formValues.name,
-            //     email: formValues.email,
-            //     country: formValues.country,
-            //     state: formValues.state,
-            //     checkboxData: selectedCheckboxes,
-            //     file: file,
-            //     fullName: fullName,
-            //     address: formValues.address,
-            //     qualification: formValues.qualification,
-            //     // gender: gender,
-            //     gender: selectedRadio,
-            // });
+
 
 
             const formData = new FormData();
@@ -247,12 +217,7 @@ const User = () => {
 
 
             try {
-                // Make a POST request to your endpoint with formData
-                // Example:
-                // const response = await axios.post('your_endpoint', formData);
-                // Handle the response as needed
-                // console.log(response);
-                // Clear form after submission
+
                 setFormValues({
                     name: '',
                     email: '',
@@ -318,23 +283,13 @@ const User = () => {
 
     const validateForm = () => {
         let valid = true;
-        const errors = {};
+        const errors = { ...formErrors };
         if (!formValues.name.trim()) {
             errors.name = 'Name is required';
             valid = false;
-        } else if (formValues.name.length < 3 || formValues.name.length > 19) {
-            errors.name = 'Name must be between 3 and 19 characters';
-            valid = false;
         }
-        // if (!gender) {
-        //     errors.gender = 'Please select gender';
-        //     valid = false;
-        // }
         if (!formValues.lastname.trim()) {
             errors.lastname = 'Last Name is required';
-            valid = false;
-        } else if (formValues.lastname.length < 3 || formValues.lastname.length > 19) {
-            errors.lastname = 'Last Name must be between 3 and 19 characters';
             valid = false;
         }
         if (!formValues.email.trim()) {
@@ -381,7 +336,11 @@ const User = () => {
         });
         setFormErrors({
             name: '',
+            lastname: '',
             email: '',
+            country: '',
+            state: '',
+            mobile: '',
             checkbox: '',
             gender: '',
         });
@@ -390,18 +349,17 @@ const User = () => {
             jason: false,
             antoine: false,
         });
-        setSelectedRadio('');
         setSelectedCountry(null);
         setStateData([]);
         setDefaultStates([]);
         setFile(null);
         setBio('');
 
-
         if (fileInputRef.current) {
             fileInputRef.current.value = '';
         }
     };
+
 
     const { gilad, jason, antoine } = state;
 
@@ -414,16 +372,16 @@ const User = () => {
     return (
         <>
             <ToastContainer />
-            <div className='bgcolor'>
-                {/* <ToastContainer /> */}
+            <div className='bgcolorU'>
                 <Navbar />
-                <Box height={70} >
+                <Box height="auto">
                     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "50px" }}>
                         <Sidenav />
-                        <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 2 }}>
+                        <Box component="main" className="main1-container" sx={{ flexGrow: 1, p: 3, mt: 2 }}>
                             <Grid container spacing={2} style={{
                                 width: '100%',
                                 boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                                backgroundColor: "#fff",
                                 padding: "10px",
                             }}>
                                 <Grid item xs={12}>
@@ -441,13 +399,12 @@ const User = () => {
 
                                 </Grid>
 
+
                                 <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                                    {/* <Paper elevation={2}> */}
+
                                     <Box
                                         component="form"
-                                        // sx={{
-                                        //     '& .MuiTextField-root': { width: '56ch', marginBottom: '20px' },
-                                        // }}
+
                                         noValidate
                                         autoComplete="on"
 
@@ -462,20 +419,19 @@ const User = () => {
                                                     placeholder={"First Name"}
                                                     name={"name"}
                                                     handleInputChange={handleInputChange}
+                                                    error={formErrors.name}
                                                 />
                                             </FormControl>
 
                                         </Box>
                                     </Box>
-                                    {/* </Paper> */}
+
                                 </Grid>
                                 <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                                    {/* <Paper elevation={2}> */}
+
                                     <Box
                                         component="form"
-                                        // sx={{
-                                        //     '& .MuiTextField-root': { width: '56ch', marginBottom: '20px' },
-                                        // }}
+
                                         noValidate
                                         autoComplete="on"
                                         onSubmit={handleFormSubmit}
@@ -489,19 +445,18 @@ const User = () => {
                                                     placeholder={"Last Name"}
                                                     name={"lastname"}
                                                     handleInputChange={handleInputChange}
+                                                    error={formErrors.lastname}
                                                 />
                                             </FormControl>
                                         </Box>
                                     </Box>
-                                    {/* </Paper> */}
+
                                 </Grid>
                                 <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                                    {/* <Paper elevation={2}> */}
+
                                     <Box
                                         component="form"
-                                        // sx={{
-                                        //     '& .MuiTextField-root': { width: '56ch', marginBottom: '20px' },
-                                        // }}
+
                                         noValidate
                                         autoComplete="on"
                                         onSubmit={handleFormSubmit}
@@ -522,16 +477,14 @@ const User = () => {
                                             </FormControl>
                                         </Box>
                                     </Box>
-                                    {/* </Paper> */}
+
                                 </Grid>
 
                                 <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                                    {/* <Paper elevation={2}> */}
+
                                     <Box
                                         component="form"
-                                        // sx={{
-                                        //     '& .MuiTextField-root': { width: '56ch', marginBottom: '20px' },
-                                        // }}
+
                                         noValidate
                                         autoComplete="on"
                                         onSubmit={handleFormSubmit}
@@ -545,20 +498,19 @@ const User = () => {
                                                     placeholder={"Mobile Number"}
                                                     name={"mobile"}
                                                     handleInputChange={handleInputChange}
+                                                    error={formErrors.mobile}
                                                 />
                                             </FormControl>
                                         </Box>
                                     </Box>
-                                    {/* </Paper> */}
+
                                 </Grid>
 
                                 <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                                    {/* <Paper elevation={2}> */}
+
                                     <Box
                                         component="form"
-                                        // sx={{
-                                        //     '& .MuiTextField-root': { width: '56ch', marginBottom: '20px' },
-                                        // }}
+
                                         noValidate
                                         autoComplete="on"
                                         onSubmit={handleFormSubmit}
@@ -572,20 +524,18 @@ const User = () => {
                                                     placeholder={"Email"}
                                                     name={"email"}
                                                     handleInputChange={handleInputChange}
+                                                    error={formErrors.email}
                                                 />
                                             </FormControl>
                                         </Box>
                                     </Box>
-                                    {/* </Paper> */}
+
                                 </Grid>
                                 <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                                    {/* <Paper elevation={2}> */}
+
                                     <Box
                                         component="form"
-                                        // sx={{
-                                        //     '& .MuiTextField-root': { width: '56ch', marginBottom: '20px' },
-                                        // }}
-                                        // noValidate
+
                                         autoComplete="on"
                                         onSubmit={handleFormSubmit}
                                     >
@@ -598,14 +548,14 @@ const User = () => {
                                                     placeholder={"Address"}
                                                     name={"address"}
                                                     handleInputChange={handleInputChange}
+                                                    error={formErrors.address}
                                                 />
                                             </FormControl>
                                         </Box>
                                     </Box>
-                                    {/* </Paper> */}
+
                                 </Grid>
                                 <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                                    {/* <Paper elevation={2}> */}
                                     <FormControl fullWidth>
                                         <Autocmp
                                             multiple={false}
@@ -617,11 +567,11 @@ const User = () => {
                                             placeholder="Select Country"
                                         />
                                     </FormControl>
-                                    {/* </Paper> */}
+
                                 </Grid>
 
                                 <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-                                    {/* <Paper elevation={2}> */}
+
                                     <FormControl fullWidth>
                                         <Autocmp
                                             multiple={true}
@@ -637,11 +587,11 @@ const User = () => {
                                             placeholder='Select State'
                                         />
                                     </FormControl>
-                                    {/* </Paper> */}
+
                                 </Grid>
 
                                 <Grid item xs={12} sm={6} lg={6} xl={6}>
-                                    {/* <Paper elevation={2}> */}
+
                                     <Box >
                                         <FormControl fullWidth>
 
@@ -656,16 +606,14 @@ const User = () => {
                                         </FormControl>
 
                                     </Box>
-                                    {/* </Paper> */}
+
                                 </Grid>
 
                                 <Grid item xs={12} sm={6} lg={6} xl={6}>
-                                    {/* <Paper elevation={2}> */}
+
                                     <Box
                                         component="form"
-                                        // sx={{
-                                        //     '& .MuiTextField-root': { width: '56ch', marginBottom: '20px' },
-                                        // }}
+
                                         noValidate
                                         autoComplete="on"
                                         onSubmit={handleFormSubmit}
@@ -683,11 +631,11 @@ const User = () => {
                                             </FormControl>
                                         </Box>
                                     </Box>
-                                    {/* </Paper> */}
+
                                 </Grid>
 
                                 <Grid item xs={12} sm={6} lg={6} xl={6}>
-                                    {/* <Paper elevation={2}> */}
+
                                     <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                                         <FormControl fullWidth required error={!!formErrors.checkbox} component="fieldset"  >
                                             <FormLabel component="legend" sx={{ textAlign: 'start', color: 'black' }}>Assign responsibility</FormLabel>
@@ -703,28 +651,23 @@ const User = () => {
                                             </FormGroup>
                                             <FormHelperText>{formErrors.checkbox}</FormHelperText>
                                         </FormControl>
-
                                     </Box>
                                     <hr />
                                     <FormControl fullWidth>
                                         <RadioButton
-                                            onChange={(value) => setSelectedRadio(value)}
+                                            onChange={(e) => setSelectedRadio(e.target.value)}
                                             value={selectedRadio}
                                             error={formErrors.gender}
                                             style={{ color: 'black' }}
+                                            label="Gender"
                                         />
                                     </FormControl>
-                                    {/* </Paper> */}
+
                                 </Grid>
                                 <Grid item xs={12} sm={6} lg={6} xl={6} justifyContent="center">
-                                    {/* <Box sx={{ mt: 4, textAlign: 'center' }}>
-                        <FormControl >
-                            <File onChange={handleFile} />
-                        </FormControl>
-                    </Box> */}
+
                                     <Grid item xs={12} sm={12} lg={12} xl={12}>
-                                        {/* <FormControl fullWidth> */}
-                                        {/* <Paper elevation={2}> */}
+
                                         <Box sx={{ mt: 5, display: "flex", justifyContent: "center", alignItems: "center", gap: 3 }}
                                         >
                                             <Box   >
@@ -738,22 +681,17 @@ const User = () => {
                                                 <Buttton name="Reset Form" onClick={handleReset} size="small" style={{ color: "white", backgroundColor: "red" }} />
                                             </Box>
                                         </Box>
-                                        {/* </FormControl> */}
-                                        {/* </Paper> */}
+
                                     </Grid>
 
-                                    {/* <Grid item xs={12} sm={12} lg={12} xl={12}> */}
-                                    {/* <Box >
-                            <Buttton color="primary" size="large" onClick={handleFormSubmit} name="Submit" />
-                        </Box> */}
-                                    {/* </Grid> */}
                                 </Grid>
+
                             </Grid>
 
                         </Box>
                     </Box>
                 </Box>
-            </div>
+            </div >
 
         </>
     );

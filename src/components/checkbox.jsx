@@ -8,6 +8,8 @@ import FormHelperText from '@mui/material/FormHelperText';
 import Checkbox from '@mui/material/Checkbox';
 
 const CheckBoxx = () => {
+
+
     const [state, setState] = React.useState({
         gilad: true,
         jason: false,
@@ -50,10 +52,10 @@ const CheckBoxx = () => {
                         label="HR"
                     />
                 </FormGroup>
-                <FormHelperText>
+                {/* <FormHelperText>
                     You can choose only two options
                     <span style={{ color: 'red' }}>*</span>
-                </FormHelperText>
+                </FormHelperText> */}
             </FormControl>
         </Box>
     )

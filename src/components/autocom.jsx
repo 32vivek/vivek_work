@@ -1,42 +1,18 @@
 import React from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { FormControl } from "@mui/material";
 
-const Autocmp = ({ size, data, label, placeholder, onChange, defaultValue, multiple, handleStateChange, style }) => {
-
-    const defaultOption = data.find(option => option.name === (defaultValue && defaultValue.name));
-
-    const defaultValueToUse = defaultOption || defaultValue;
-
-    const handleSelectionChange = (event, value) => {
-        onChange({
-            target: { name: "day", value: value },
-        });
-        if (handleStateChange) {
-            handleStateChange(value);
-        }
-    }
-
+const Autocmp = ({ data, options, value, label, onChange, size, variant, placeholder }) => {
     return (
-        <FormControl fullWidth>
-            <Autocomplete
-                multiple={multiple}
-                limitTags={1}
-                id="multiple-limit-tags"
-                options={data}
-                size={size}
-                variant="standard"
-                style={style}
-                getOptionLabel={(option) => option.name}
-                onChange={handleSelectionChange}
-                value={defaultValue}
-                isOptionEqualToValue={(option, value) => option.name === value.name}
-                renderInput={(params) => (
-                    <TextField {...params} label={label} placeholder={placeholder} color="primary" InputLabelProps={{ style: { color: 'black' } }} />
-                )}
-            />
-        </FormControl>
+        <Autocomplete
+            value={value || null}
+            size={size}
+            onChange={(event, newValue) => {
+                onChange(newValue);
+            }}
+            options={data || options}
+            renderInput={(params) => <TextField {...params} variant={variant} label={label} placeholder={placeholder} InputLabelProps={{ style: { color: 'black' } }} />}
+        />
     );
-};
+}
 export default Autocmp;

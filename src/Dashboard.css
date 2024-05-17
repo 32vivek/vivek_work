@@ -27,12 +27,46 @@
     background-image: linear-gradient(120deg, #f093fb 0%, #f5576c 100%);
 }
 
-.bgcolor {
-    min-height: 90vh;
+.bgcolorH {
+    /* min-height: 600px; */
     /* min-height:min-content; */
     background: #ECEFF1;
     background: linear-gradient(158deg, rgb(224, 224, 224) 0%, rrgb(233, 237, 254)100%);
 }
+
+.bgcolor {
+    min-height: 530px;
+    /* min-height:min-content; */
+    background: #ECEFF1;
+    background: linear-gradient(158deg, rgb(224, 224, 224) 0%, rrgb(233, 237, 254)100%);
+}
+
+.bgcolorU {
+    min-height: 530px;
+    /* min-height:min-content; */
+    background: #ECEFF1;
+    background: linear-gradient(158deg, rgb(224, 224, 224) 0%, rrgb(233, 237, 254)100%);
+}
+
+.bgcolorD {
+    min-height: 530px;
+    /* min-height:min-content; */
+    background: #ECEFF1;
+    background: linear-gradient(158deg, rgb(224, 224, 224) 0%, rrgb(233, 237, 254)100%);
+}
+
+.bgcolorA {
+    min-height: 530px;
+    /* min-height:min-content; */
+    background: #ECEFF1;
+    background: linear-gradient(158deg, rgb(224, 224, 224) 0%, rrgb(233, 237, 254)100%);
+}
+/* .bgcolorarray {
+    min-height: 100vh;
+    min-height:min-content;
+    background: #ECEFF1;
+    background: linear-gradient(158deg, rgb(224, 224, 224) 0%, rrgb(233, 237, 254)100%);
+} */
 /* .tablegcolor {
     min-height: 91vh;
     background: #ECEFF1;

@@ -70,7 +70,7 @@ const UserDetails = () => {
 
             <div className=" bgcolor">
                 <Navbar />
-                <Box height={70}>
+                <Box height="auto">
                     <Box sx={{ display: "flex", marginTop: "60px" }}>
                         <Sidenav />
                         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

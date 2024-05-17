@@ -9,6 +9,7 @@ export default function Dropdown1({
     options,
     handleInputChange,
     name,
+    error,
     formValues = {},
     label,
     defaultOption,
